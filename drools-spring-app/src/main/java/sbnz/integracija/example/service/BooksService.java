@@ -10,10 +10,12 @@ import java.util.List;
 @Service
 public class BooksService {
    @Autowired
-    BooksRepository booksRepository;
+   BooksRepository booksRepository;
 
    public List<Book> getAll() {
        return booksRepository.findAll();
    }
-
+   public Book create(Book newBook) {
+       return booksRepository.save(newBook);
+   }
 }

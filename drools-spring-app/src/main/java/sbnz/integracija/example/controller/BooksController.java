@@ -1,14 +1,11 @@
 package sbnz.integracija.example.controller;
 
 import demo.facts.Book;
-import demo.facts.Item;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import sbnz.integracija.example.dto.BookCreateDto;
 import sbnz.integracija.example.service.BooksService;
 
 import java.util.List;
@@ -18,8 +15,12 @@ public class BooksController {
     @Autowired
     BooksService booksService;
 
-    @RequestMapping(value = "/books", method = RequestMethod.GET, produces = "application/json")
+    @GetMapping(value = "/books", produces = "application/json")
     public ResponseEntity<List<Book>> getAll() {
        return new ResponseEntity<>(booksService.getAll(), HttpStatus.OK);
+    }
+    @PostMapping(value = "/books", produces = "application/json")
+    public ResponseEntity<Book> create(@RequestBody BookCreateDto newBook) {
+        return new ResponseEntity<>(booksService.create(newBook.toEntity()), HttpStatus.CREATED);
     }
 }
