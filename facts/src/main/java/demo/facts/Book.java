@@ -18,4 +18,11 @@ public class Book {
     private String writer;
     @Column
     private Long cost;
+
+    public Book() {}
+    public Book(String title, String writer, Long cost) {
+        this.title = title;
+        this.writer = writer;
+        this.cost = cost;
+    }
 }
