@@ -9,6 +9,7 @@ import sbnz.integracija.example.service.UserService;
 @RestController
 @RequestMapping(path="/users")
 @AllArgsConstructor
+@CrossOrigin("http://localhost:4200")
 public class UserController {
 
     private UserService userService;
