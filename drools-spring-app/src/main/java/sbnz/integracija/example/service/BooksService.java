@@ -15,6 +15,9 @@ public class BooksService {
    public List<Book> getAll() {
        return booksRepository.findAll();
    }
+   public Book getById(Long id) {
+       return booksRepository.findById(id).orElse(null);
+   }
    public Book create(Book newBook) {
        return booksRepository.save(newBook);
    }

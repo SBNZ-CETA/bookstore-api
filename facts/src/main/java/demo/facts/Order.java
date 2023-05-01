@@ -1,7 +1,7 @@
 package demo.facts;
 
 import javax.persistence.*;
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 @Entity
@@ -16,23 +16,25 @@ public class Order {
     private List<OrderItem> orderItems;
 
     @Column(nullable = false)
-    private Long totalPrice;
+    private Double totalPrice;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private OrderStatus status;
 
     public Order() {
-        this.orderItems = new ArrayList<>();
-        this.totalPrice = 0L;
     }
 
-    public Long getTotalPrice() {
+    public Double getTotalPrice() {
         return totalPrice;
     }
 
-    public void setTotalPrice(Long totalPrice) {
+    public void setTotalPrice(Double totalPrice) {
         this.totalPrice = totalPrice;
-    }
-
-    public void addOrderItem(OrderItem orderItem) {
-        this.orderItems.add(orderItem);
     }
 
     public List<OrderItem> getOrderItems() {
@@ -41,5 +43,21 @@ public class Order {
 
     public void setOrderItems(List<OrderItem> orderItems) {
         this.orderItems = orderItems;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public OrderStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(OrderStatus status) {
+        this.status = status;
     }
 }

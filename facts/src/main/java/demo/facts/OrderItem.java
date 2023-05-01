@@ -1,10 +1,11 @@
 package demo.facts;
 
+
 import javax.persistence.*;
 
 @Entity
 @Table(name = "order_items")
-public class OrderItem {
+public class OrderItem{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -21,7 +22,7 @@ public class OrderItem {
     private Order order;
 
     @Column(nullable = false)
-    private Long price;
+    private Double price;
 
     public OrderItem() {}
 
@@ -49,15 +50,12 @@ public class OrderItem {
         this.order = order;
     }
 
-    public Long getPrice() {
+    public Double getPrice() {
         return price;
     }
 
-    public void setPrice(Long price) {
+    public void setPrice(Double price) {
         this.price = price;
     }
 
-    public Long calculatePrice() {
-        return book.getCost() * quantity;
-    }
 }

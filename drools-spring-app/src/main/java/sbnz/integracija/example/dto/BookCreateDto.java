@@ -7,7 +7,7 @@ import lombok.Data;
 public class BookCreateDto {
     private String title;
     private String writer;
-    private Long cost;
+    private Double cost;
 
     public Book toEntity() {
         return new Book(this.title, this.writer, this.cost);
