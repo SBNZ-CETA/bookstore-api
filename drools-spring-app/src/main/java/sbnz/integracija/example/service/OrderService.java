@@ -35,35 +35,35 @@ public class OrderService {
         this.kieContainer = kieContainer;
     }
 
-    public OrderDto create(CheckoutDto checkoutDto){
+    public OrderDto create(CreateOrderDto createOrderDto){
         Order order = new Order();
-        order.setUser(userService.getByUsername(checkoutDto.getUsername()));
-        order.setTotalPrice(checkoutDto.getDiscountedPrice());
-        order.setOrderItems(mapDtoItemsToEntity(checkoutDto.getOrderItems(), order));
+        order.setUser(userService.getByUsername(createOrderDto.getUsername()));
+        order.setPaymentType(createOrderDto.getPaymentType());
+        order.setTotalPrice(createOrderDto.getTotalPrice());
+        order.setOrderItems(mapDtoItemsToEntity(createOrderDto.getOrderItems(), order));
         order.setStatus(OrderStatus.CREATED);
 
         return modelMapper.map(orderRepository.save(order), OrderDto.class);
     }
 
-    public CheckoutDto checkout(CreateOrderDto createOrderDto) {
-        CheckoutDto checkoutDto = new CheckoutDto();
-        checkoutDto.setUsername(createOrderDto.getUsername());
-        setBookAttributesAndPrices(createOrderDto);
-        List<OrderItemDto> orderItemsWithInitialPrices = copyWithInitialPrices(createOrderDto.getOrderItems());
+    public CreateOrderDto checkout(CreateOrderDto createOrderDto) {
 
+        setBookAttributesAndPrices(createOrderDto);
+
+        List<OrderItemDto> orderItemsWithInitialPrices = copyWithInitialPrices(createOrderDto.getOrderItems());
         double itemDiscountPrice = calculatePriceOfItemDiscount(createOrderDto);
 
         applyOrderDiscount(createOrderDto);
 
         if(itemDiscountPrice < createOrderDto.getTotalPrice()){
-            checkoutDto.setDiscountedPrice(itemDiscountPrice);
-            checkoutDto.setOrderItems(createOrderDto.getOrderItems());
+            createOrderDto.setTotalPrice(itemDiscountPrice);
+            createOrderDto.setOrderItems(createOrderDto.getOrderItems());
         }else{
-            checkoutDto.setDiscountedPrice(createOrderDto.getTotalPrice());
-            checkoutDto.setOrderItems(orderItemsWithInitialPrices);
+            createOrderDto.setTotalPrice(createOrderDto.getTotalPrice());
+            createOrderDto.setOrderItems(orderItemsWithInitialPrices);
         }
 
-        return checkoutDto;
+        return createOrderDto;
     }
 
     private double calculatePriceOfItemDiscount(CreateOrderDto createOrderDto){

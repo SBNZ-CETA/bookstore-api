@@ -9,7 +9,7 @@ import java.util.List;
 @Data
 public class CreateOrderDto {
     private final String username;
-    private final List<OrderItemDto> orderItems;
+    private List<OrderItemDto> orderItems;
     private Double totalPrice;
     private final PaymentType paymentType;
 
@@ -19,5 +19,13 @@ public class CreateOrderDto {
 
     public void setTotalPrice(Double totalPrice) {
         this.totalPrice = totalPrice;
+    }
+
+    public List<OrderItemDto> getOrderItems() {
+        return orderItems;
+    }
+
+    public void setOrderItems(List<OrderItemDto> orderItems) {
+        this.orderItems = orderItems;
     }
 }

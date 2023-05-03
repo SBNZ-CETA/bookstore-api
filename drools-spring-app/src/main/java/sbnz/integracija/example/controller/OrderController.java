@@ -19,12 +19,12 @@ public class OrderController {
     }
 
     @PostMapping(produces = "application/json")
-    public ResponseEntity<OrderDto> createOrder(@RequestBody CheckoutDto checkoutDto) {
-        return new ResponseEntity<>(orderService.create(checkoutDto), HttpStatus.CREATED);
+    public ResponseEntity<OrderDto> createOrder(@RequestBody CreateOrderDto createOrderDto) {
+        return new ResponseEntity<>(orderService.create(createOrderDto), HttpStatus.CREATED);
     }
 
     @PostMapping(value="/checkout",produces = "application/json")
-    public ResponseEntity<CheckoutDto> checkout(@RequestBody CreateOrderDto createOrderDto) {
+    public ResponseEntity<CreateOrderDto> checkout(@RequestBody CreateOrderDto createOrderDto) {
         return new ResponseEntity<>(orderService.checkout(createOrderDto), HttpStatus.CREATED);
     }
 }

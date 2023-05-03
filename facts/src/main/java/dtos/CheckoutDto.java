@@ -33,4 +33,12 @@ public class CheckoutDto {
     public void setDiscountedPrice(Double discountedPrice) {
         this.discountedPrice = discountedPrice;
     }
+
+    public PaymentType getPaymentType() {
+        return paymentType;
+    }
+
+    public void setPaymentType(PaymentType paymentType) {
+        this.paymentType = paymentType;
+    }
 }
