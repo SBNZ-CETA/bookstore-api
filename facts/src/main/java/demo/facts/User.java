@@ -10,10 +10,12 @@ import org.springframework.security.core.userdetails.UserDetails;
 import javax.persistence.*;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
 @Data
 @Entity
-@Table(name="users")
+@Table(name="users_table")
 @NoArgsConstructor
 public class User implements UserDetails {
 
@@ -27,6 +29,8 @@ public class User implements UserDetails {
     private String password;
     @Enumerated(EnumType.STRING)
     private UserType type;
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private Set<Order> orders;
 
     public User(String name, String surname, String email, String username, String password, UserType type) {
         this.name = name;
