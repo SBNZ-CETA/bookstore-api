@@ -4,7 +4,6 @@ import demo.facts.Book;
 import demo.facts.Order;
 import demo.facts.OrderItem;
 import demo.facts.OrderStatus;
-import dtos.CheckoutDto;
 import dtos.CreateOrderDto;
 import dtos.OrderDto;
 import dtos.OrderItemDto;
@@ -14,7 +13,6 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import sbnz.integracija.example.repository.OrderRepository;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 

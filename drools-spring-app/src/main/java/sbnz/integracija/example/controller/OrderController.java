@@ -1,7 +1,5 @@
 package sbnz.integracija.example.controller;
 
-import demo.facts.Book;
-import dtos.CheckoutDto;
 import dtos.CreateOrderDto;
 import dtos.OrderDto;
 import org.springframework.http.HttpStatus;
