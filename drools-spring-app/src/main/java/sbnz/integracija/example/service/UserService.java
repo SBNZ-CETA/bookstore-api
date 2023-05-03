@@ -45,7 +45,7 @@ public class UserService implements UserDetailsService {
         if(userExists) throw new IllegalStateException("User with email '"+email+"' already exists!");
     }
 
-    public User getById(Long id) {
-        return userRepository.findById(id).orElse(null);
+    public User getByUsername(String username) {
+        return userRepository.findUserByUsername(username).orElse(null);
     }
 }

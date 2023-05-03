@@ -1,18 +1,21 @@
 package dtos;
 
+import demo.facts.PaymentType;
+
 import java.util.List;
 
 public class CheckoutDto {
-    private Long userId;
+    private String username;
     private List<OrderItemDto> orderItems;
     private Double discountedPrice;
+    private PaymentType paymentType;
 
-    public Long getUserId() {
-        return userId;
+    public String getUsername() {
+        return username;
     }
 
-    public void setUserId(Long userId) {
-        this.userId = userId;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public List<OrderItemDto> getOrderItems() {

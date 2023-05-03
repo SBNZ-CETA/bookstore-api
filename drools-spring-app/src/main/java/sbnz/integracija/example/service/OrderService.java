@@ -37,7 +37,7 @@ public class OrderService {
 
     public OrderDto create(CheckoutDto checkoutDto){
         Order order = new Order();
-        order.setUser(userService.getById(checkoutDto.getUserId()));
+        order.setUser(userService.getByUsername(checkoutDto.getUsername()));
         order.setTotalPrice(checkoutDto.getDiscountedPrice());
         order.setOrderItems(mapDtoItemsToEntity(checkoutDto.getOrderItems(), order));
         order.setStatus(OrderStatus.CREATED);
@@ -47,8 +47,8 @@ public class OrderService {
 
     public CheckoutDto checkout(CreateOrderDto createOrderDto) {
         CheckoutDto checkoutDto = new CheckoutDto();
-        checkoutDto.setUserId(createOrderDto.getUserId());
-        calculatePrices(createOrderDto);
+        checkoutDto.setUsername(createOrderDto.getUsername());
+        setBookAttributesAndPrices(createOrderDto);
         List<OrderItemDto> orderItemsWithInitialPrices = copyWithInitialPrices(createOrderDto.getOrderItems());
 
         double itemDiscountPrice = calculatePriceOfItemDiscount(createOrderDto);
@@ -112,10 +112,11 @@ public class OrderService {
                 .collect(Collectors.toList());
     }
 
-    private void calculatePrices(CreateOrderDto createOrderDto){
+    private void setBookAttributesAndPrices(CreateOrderDto createOrderDto){
         List<OrderItemDto> orderItems = createOrderDto.getOrderItems();
         orderItems.stream().forEach(orderItem -> {
             Book book = booksService.getById(orderItem.getBookId());
+            orderItem.setBookCategory(book.getCategory());
             orderItem.setPrice(book.getCost() * orderItem.getQuantity());
         });
         createOrderDto.setTotalPrice(orderItems.stream().mapToDouble(OrderItemDto::getPrice).sum());
