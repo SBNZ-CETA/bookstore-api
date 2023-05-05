@@ -6,6 +6,7 @@ import dtos.CreateOrderDto;
 import dtos.OrderDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import sbnz.integracija.example.service.OrderService;
 
@@ -19,11 +20,13 @@ public class OrderController {
     }
 
     @PostMapping(produces = "application/json")
+    @PreAuthorize("hasAuthority('REGULAR')")
     public ResponseEntity<OrderDto> createOrder(@RequestBody CreateOrderDto createOrderDto) {
         return new ResponseEntity<>(orderService.create(createOrderDto), HttpStatus.CREATED);
     }
 
     @PostMapping(value="/checkout",produces = "application/json")
+    @PreAuthorize("hasAuthority('REGULAR')")
     public ResponseEntity<CreateOrderDto> checkout(@RequestBody CreateOrderDto createOrderDto) {
         return new ResponseEntity<>(orderService.checkout(createOrderDto), HttpStatus.CREATED);
     }
