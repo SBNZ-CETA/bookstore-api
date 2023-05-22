@@ -30,6 +30,13 @@ public class Book {
     private Double rating;
     @Column
     private int rateCount;
+    @Transient
+    private boolean isNew;
+    @Transient
+    private boolean isPopular;
+    @Transient
+    @Enumerated(EnumType.STRING)
+    private RateUnit rateUnit;
 
     public Book() {}
     public Book(String title, String writer, Double cost) {

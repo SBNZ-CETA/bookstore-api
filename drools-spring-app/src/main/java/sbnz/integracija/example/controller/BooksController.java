@@ -31,4 +31,8 @@ public class BooksController {
     public ResponseEntity<Book> review(@RequestBody BookReviewDto reviewDto){
         return new ResponseEntity<>(booksService.review(reviewDto), HttpStatus.OK);
     }
+    @GetMapping(value = "/recommend-unauthorized", produces = "application/json")
+    public ResponseEntity<List<Book>> getRecommendedUnauthorized() {
+        return new ResponseEntity<>(booksService.getRecommendedUnauthorized(), HttpStatus.OK);
+    }
 }
