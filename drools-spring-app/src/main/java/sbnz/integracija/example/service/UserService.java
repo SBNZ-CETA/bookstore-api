@@ -8,6 +8,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import sbnz.integracija.example.repository.UserRepository;
 import sbnz.integracija.example.utils.EmailValidator;
@@ -18,11 +19,12 @@ public class UserService implements UserDetailsService {
 
     private final UserRepository userRepository;
     private final EmailValidator emailValidator;
-    private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final PasswordEncoder bCryptPasswordEncoder;
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return userRepository.findUserByUsername(username)
+        User user = userRepository.findUserByUsername(username)
                 .orElseThrow(()-> new UsernameNotFoundException("User with username '"+username+"' not found!"));
+        return user;
     }
 
     public boolean register(RegisterDto request) {

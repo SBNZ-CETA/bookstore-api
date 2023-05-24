@@ -13,7 +13,7 @@ import sbnz.integracija.example.service.BooksService;
 import java.util.List;
 
 @RestController
-@CrossOrigin("http://localhost:4200")
+@CrossOrigin( value = "http://localhost:4200" , maxAge = 3600 )
 public class BooksController {
     @Autowired
     BooksService booksService;
