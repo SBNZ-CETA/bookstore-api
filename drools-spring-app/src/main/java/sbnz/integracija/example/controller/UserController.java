@@ -2,6 +2,9 @@ package sbnz.integracija.example.controller;
 
 import dtos.RegisterDto;
 import lombok.AllArgsConstructor;
+
+import javax.annotation.security.RolesAllowed;
+
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import sbnz.integracija.example.service.UserService;
@@ -27,13 +30,15 @@ public class UserController {
     }
 
     @GetMapping("/adm")
-    @PreAuthorize("hasAuthority('ADMIN')")
+    // @PreAuthorize("hasAuthority('ADMIN')")
+    @RolesAllowed({"ADMIN"})
     public String adminEndpoint(){
         return "YOUR ADMIN";
     }
 
     @GetMapping("/usrAdm")
-    @PreAuthorize("hasAnyAuthority('ADMIN','REGULAR')")
+    // @PreAuthorize("hasAnyAuthority('ADMIN','REGULAR')")
+    @RolesAllowed({"ADMIN","REGULAR"})
     public String userAdminEndpoint(){
         return "YOUR USER or ADMIN";
     }

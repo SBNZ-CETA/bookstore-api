@@ -1,13 +1,13 @@
 package demo.facts;
 
-import lombok.Data;
-
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.Set;
 
+import lombok.Data;
+@Data
 @Entity
 @Table(name = "books")
-@Data
 public class Book {
 
     @Id
@@ -26,8 +26,8 @@ public class Book {
     private LocalDateTime publishDate;
     @Column
     private LocalDateTime releaseDate;
-    @Column
-    private Double rating;
+    @OneToMany(mappedBy = "", cascade = CascadeType.ALL)
+    private Set<Rating> ratings;
     @Column
     private int rateCount;
     @Transient
@@ -65,8 +65,8 @@ public class Book {
         this.category = category;
     }
 
-    public void addNewRating(int rating){
-        this.rating = ((this.rateCount*this.rating) + rating) / (this.rateCount + 1);
-        this.rateCount = this.rateCount + 1;
-    }
+    // public void addNewRating(int rating){
+    //     this.rating = ((this.rateCount*this.rating) + rating) / (this.rateCount + 1);
+    //     this.rateCount = this.rateCount + 1;
+    // }
 }

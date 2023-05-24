@@ -1,6 +1,8 @@
 package sbnz.integracija.example.controller;
 
 import demo.facts.Book;
+import demo.facts.BookCategory;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -34,5 +36,9 @@ public class BooksController {
     @GetMapping(value = "/recommend-unauthorized", produces = "application/json")
     public ResponseEntity<List<Book>> getRecommendedUnauthorized() {
         return new ResponseEntity<>(booksService.getRecommendedUnauthorized(), HttpStatus.OK);
+    }
+    @GetMapping(value = "/books/categories",produces = "application/json")
+    public ResponseEntity<List<BookCategory>> getPossibleCategories() {
+        return new ResponseEntity<>(booksService.getAllBookCategories(), HttpStatus.OK);
     }
 }

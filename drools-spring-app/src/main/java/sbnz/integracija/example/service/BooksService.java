@@ -1,6 +1,7 @@
 package sbnz.integracija.example.service;
 
 import demo.facts.Book;
+import demo.facts.BookCategory;
 import demo.facts.RateUnit;
 import demo.facts.UnauthorizedRecommendedBooks;
 import org.dmg.pmml.Model;
@@ -14,6 +15,7 @@ import sbnz.integracija.example.dto.BookReviewDto;
 import sbnz.integracija.example.repository.BooksRepository;
 
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -74,5 +76,9 @@ public class BooksService {
 //        kieSession.fireAllRules();
         kieSession.dispose();
         return unauthorizedRecommendedBooks.getBooks();
+    }
+
+    public List<BookCategory> getAllBookCategories() {
+        return Arrays.asList(BookCategory.values());
     }
 }

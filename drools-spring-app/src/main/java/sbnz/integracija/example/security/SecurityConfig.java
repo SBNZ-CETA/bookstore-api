@@ -1,10 +1,10 @@
-package sbnz.integracija.example.security.config;
+package sbnz.integracija.example.security;
 
-import lombok.AllArgsConstructor;
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -17,41 +17,63 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-import sbnz.integracija.example.security.CustomAuthenticationFilter;
-import sbnz.integracija.example.security.CustomAuthorizationFilter;
+import lombok.RequiredArgsConstructor;
 import sbnz.integracija.example.service.UserService;
 
-import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
 
+@RequiredArgsConstructor
 @Configuration
-@AllArgsConstructor
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(prePostEnabled = true)
-public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
-
+@EnableGlobalMethodSecurity(securedEnabled = true, jsr250Enabled = true)
+public class SecurityConfig extends WebSecurityConfigurerAdapter{
     private final UserService userService;
-    private final CustomAuthorizationFilter authorizationFilter;
-    private final PasswordEncoder passwordEncoder;
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
-        http = http.cors().and().csrf().disable();
-
-        http = http.sessionManagement()
-            .sessionCreationPolicy(STATELESS)
-            .and();
-        // http.authorizeRequests().antMatchers("/users/noUsr", "/books/**", "/users/register", "/login",  "/review", "/order/**", "/recommend-unauthorized").permitAll();
-        http.authorizeRequests().anyRequest().permitAll();
-        // http = http.addFilter(new CustomAuthenticationFilter(authenticationManagerBean()));
-        http = http.addFilterBefore(authorizationFilter, UsernamePasswordAuthenticationFilter.class);
-    }
+    private final JwtFilter jwtTokenFilter;
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userService).passwordEncoder(passwordEncoder);
+        auth.userDetailsService(userService);
     }
 
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
 
-    
+        // Enable CORS and disable CSRF
+        http = http.cors().and().csrf().disable();
+
+        // Set session management to stateless
+        http = http
+                .sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and();
+
+        // Set unauthorized requests exception handler
+        http = http
+                .exceptionHandling()
+                .authenticationEntryPoint(
+                        (request, response, ex) -> {
+                            response.sendError(
+                                    HttpServletResponse.SC_UNAUTHORIZED,
+                                    ex.getMessage()
+                            );
+                        }
+                )
+                .and();
+
+        http.authorizeRequests()
+                .anyRequest().permitAll();
+
+        // Add JWT token filter
+        http.addFilterBefore(
+                jwtTokenFilter,
+                UsernamePasswordAuthenticationFilter.class
+        );
+    }
+
+    // @Bean
+    // public PasswordEncoder passwordEncoder() {
+    //     return new BCryptPasswordEncoder();
+    // }
+
     @Override @Bean
     public AuthenticationManager authenticationManagerBean() throws Exception {
         return super.authenticationManagerBean();

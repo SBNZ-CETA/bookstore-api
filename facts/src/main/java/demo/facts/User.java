@@ -10,7 +10,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import javax.persistence.*;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.Set;
 
 @Data
@@ -32,6 +31,11 @@ public class User implements UserDetails {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private Set<Order> orders;
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private Set<Rating> ratings;
+
+    private boolean isNew;
+
     public User(String name, String surname, String email, String username, String password, UserType type) {
         this.name = name;
         this.surname = surname;
@@ -39,6 +43,7 @@ public class User implements UserDetails {
         this.username = username;
         this.password = password;
         this.type = type;
+        this.isNew = false;
     }
 
     @Override
