@@ -24,7 +24,7 @@ public class UserController {
 
     //PRIMERI ZA AUTHORIZATION!
     @GetMapping("/usr")
-    @PreAuthorize("hasAuthority('REGULAR')")
+    @RolesAllowed({"REGULAR"})
     public String userEndpoint(){
         return "YOUR USER";
     }

@@ -11,5 +11,5 @@ insert into books (title, writer, cost, category, publish_date, release_date, ra
 insert into books (title, writer, cost, category, publish_date, release_date, rating, rate_count) values ('Manijak i zena kentaur', 'Padovan Hirsl', 500, 'ROMANCE', DATE('2023-1-1'), DATE('2023-1-2'), 3, 27);
 insert into books (title, writer, cost, category, publish_date, release_date, rating, rate_count) values ('Salah', 'Luka Kajoli i Siril Kolo', 200, 'FICTION', DATE('2021-6-8'), DATE('2022-1-4'), 5, 12);
 
-insert into users_table (name, surname, email, username, password, type) values ('qwer', 'asd', 'asdf', 'qwe', 'asd', 'REGULAR');
-insert into users_table (name, surname, email, username, password, type) values ('asd', 'qwer', 'asdf', 'asd', 'asd', 'ADMIN');
+insert into users_table (name, surname, email, username, password, type, is_new) values ('qwer', 'asd', 'asdf', 'qwe', 'asd', 'REGULAR', 'true');
+insert into users_table (name, surname, email, username, password, type, is_new) values ('asd', 'qwer', 'asdf', 'asd', 'asd', 'ADMIN', 'true');

@@ -1,0 +1,24 @@
+package sbnz.integracija;
+import demo.facts.User;
+import demo.facts.UserState
+import java.time.LocalDate;
+import java.util.ArrayList;
+
+rule "New User if less than 10 books rated AND has favorite Genres"
+    agenda-group "userState"
+        when
+            $u : User($u.getRatingNumber < 10, $u.hasFavoriteGenres == true)
+        then
+            modify($u){setState(UserState.NEW_WITH_GENRES)}
+    end
+// rule "New User if less than 10 books rate AND NO favorite Genres"
+//     agenda-group "userState"
+//     when
+//         $u : User(getBooks < 10)
+//     then
+
+// rule "Old User if more than 10 books rated"
+//     agenda-group "userState"
+//     when
+//         $u : User(getBooks < 10)
+//     then

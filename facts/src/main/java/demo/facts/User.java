@@ -1,8 +1,11 @@
 package demo.facts;
 
 
-import lombok.Data;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -12,10 +15,12 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Set;
 
-@Data
 @Entity
 @Table(name="users_table")
 @NoArgsConstructor
+@Getter
+@Setter
+@AllArgsConstructor
 public class User implements UserDetails {
 
     @Id
@@ -34,7 +39,11 @@ public class User implements UserDetails {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private Set<Rating> ratings;
 
-    private boolean isNew;
+    @ManyToMany
+    public Set<Genre> favoriteGenres;
+
+    @Enumerated(EnumType.STRING)
+    private UserState state;
 
     public User(String name, String surname, String email, String username, String password, UserType type) {
         this.name = name;
@@ -43,7 +52,24 @@ public class User implements UserDetails {
         this.username = username;
         this.password = password;
         this.type = type;
-        this.isNew = false;
+        // this.isNew = true;  
+        this.state = UserState.OLD;
+    }
+
+    public User(Long id) {
+        this.id = id;
+    }
+
+    public int getRatingNumber(){
+        return ratings.size();
+    }
+
+    public boolean hasFavoriteGenres(){
+        return !favoriteGenres.isEmpty();
+    }
+
+    public Set<Genre> getFavoriteGenres(){
+        return favoriteGenres;
     }
 
     @Override

@@ -2,6 +2,8 @@ package sbnz.integracija.example.controller;
 
 import demo.facts.Book;
 import demo.facts.BookCategory;
+import demo.facts.Rating;
+import dtos.BookDto;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,15 +24,15 @@ public class BooksController {
 
 
     @GetMapping(value = "/books", produces = "application/json")
-    public ResponseEntity<List<Book>> getAll() {
-       return new ResponseEntity<>(booksService.getAll(), HttpStatus.OK);
+    public ResponseEntity<List<BookDto>> getAll() {
+       return new ResponseEntity<>(booksService.getAllBookDtos(), HttpStatus.OK);
     }
     @PostMapping(value = "/books", produces = "application/json")
     public ResponseEntity<Book> create(@RequestBody BookCreateDto newBook) {
         return new ResponseEntity<>(booksService.create(newBook), HttpStatus.CREATED);
     }
     @PostMapping(value = "/review", produces = "application/json")
-    public ResponseEntity<Book> review(@RequestBody BookReviewDto reviewDto){
+    public ResponseEntity<Rating> review(@RequestBody BookReviewDto reviewDto){
         return new ResponseEntity<>(booksService.review(reviewDto), HttpStatus.OK);
     }
     @GetMapping(value = "/recommend-unauthorized", produces = "application/json")
@@ -40,5 +42,9 @@ public class BooksController {
     @GetMapping(value = "/books/categories",produces = "application/json")
     public ResponseEntity<List<BookCategory>> getPossibleCategories() {
         return new ResponseEntity<>(booksService.getAllBookCategories(), HttpStatus.OK);
+    }
+
+    public ResponseEntity<List<Book>> getReccommendedAuthorized(){
+        return new ResponseEntity<>(booksService.getReccommendedAuthorized(),HttpStatus.OK);
     }
 }

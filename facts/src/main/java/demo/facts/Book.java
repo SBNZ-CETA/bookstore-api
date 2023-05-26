@@ -4,10 +4,17 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Set;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
-@Data
+import lombok.Getter;
+import lombok.Setter;
+
+
 @Entity
 @Table(name = "books")
+@AllArgsConstructor
+@Getter
+@Setter
 public class Book {
 
     @Id
@@ -26,9 +33,9 @@ public class Book {
     private LocalDateTime publishDate;
     @Column
     private LocalDateTime releaseDate;
-    @OneToMany(mappedBy = "", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "book", cascade = CascadeType.ALL)
     private Set<Rating> ratings;
-    @Column
+    private Double rating;
     private int rateCount;
     @Transient
     private boolean isNew;
