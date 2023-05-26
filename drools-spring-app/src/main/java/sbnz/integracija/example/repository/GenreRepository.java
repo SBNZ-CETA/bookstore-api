@@ -1,5 +1,9 @@
-// package sbnz.integracija.example.repository;
+package sbnz.integracija.example.repository;
 
-// public interface GenreRepository {
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import demo.facts.Genre;
+
+public interface GenreRepository extends JpaRepository<Genre,Long>{
     
-// }
+}

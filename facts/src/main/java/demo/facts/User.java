@@ -13,6 +13,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import javax.persistence.*;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -42,18 +43,18 @@ public class User implements UserDetails {
     @ManyToMany
     public Set<Genre> favoriteGenres;
 
+    @Transient
     @Enumerated(EnumType.STRING)
     private UserState state;
 
-    public User(String name, String surname, String email, String username, String password, UserType type) {
+    public User(String name, String surname, String email, String username, String password, UserType type, Set<Genre> favoriteGenres) {
         this.name = name;
         this.surname = surname;
         this.email = email;
         this.username = username;
         this.password = password;
         this.type = type;
-        // this.isNew = true;  
-        this.state = UserState.OLD;
+        this.favoriteGenres = favoriteGenres;
     }
 
     public User(Long id) {

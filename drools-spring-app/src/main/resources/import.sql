@@ -1,3 +1,18 @@
+-- GENRES 
+
+insert into genre (name) values ('Action');
+insert into genre (name) values ('Comedy');
+insert into genre (name) values ('Drama');
+insert into genre (name) values ('Fantasy');
+insert into genre (name) values ('Horror');
+insert into genre (name) values ('Mystery');
+insert into genre (name) values ('Romance');
+insert into genre (name) values ('Thriller');
+insert into genre (name) values ('Western');
+insert into genre (name) values ('Sci-Fi');
+
+
+
 -- BOOKS
 insert into books (title, writer, cost, category, publish_date, release_date, rating, rate_count) values ('Na drini cuprija', 'Ivo Andric', 800, 'EDUCATION', DATE('1945-3-11'), DATE('2021-6-21'), 5, 112);
 insert into books (title, writer, cost, category, publish_date, release_date, rating, rate_count) values ('1984', 'George Orwell', 100, 'EDUCATION', DATE('1949-6-8'), DATE('2022-1-4'), 5, 12);
@@ -11,5 +26,5 @@ insert into books (title, writer, cost, category, publish_date, release_date, ra
 insert into books (title, writer, cost, category, publish_date, release_date, rating, rate_count) values ('Manijak i zena kentaur', 'Padovan Hirsl', 500, 'ROMANCE', DATE('2023-1-1'), DATE('2023-1-2'), 3, 27);
 insert into books (title, writer, cost, category, publish_date, release_date, rating, rate_count) values ('Salah', 'Luka Kajoli i Siril Kolo', 200, 'FICTION', DATE('2021-6-8'), DATE('2022-1-4'), 5, 12);
 
-insert into users_table (name, surname, email, username, password, type, is_new) values ('qwer', 'asd', 'asdf', 'qwe', 'asd', 'REGULAR', 'true');
-insert into users_table (name, surname, email, username, password, type, is_new) values ('asd', 'qwer', 'asdf', 'asd', 'asd', 'ADMIN', 'true');
+insert into users_table (name, surname, email, username, password, type) values ('qwer', 'asd', 'asdf', 'qwe', 'asd', 'REGULAR');
+insert into users_table (name, surname, email, username, password, type) values ('asd', 'qwer', 'asdf', 'asd', 'asd', 'ADMIN');

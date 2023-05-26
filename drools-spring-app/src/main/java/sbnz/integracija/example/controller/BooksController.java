@@ -2,6 +2,7 @@ package sbnz.integracija.example.controller;
 
 import demo.facts.Book;
 import demo.facts.BookCategory;
+import demo.facts.Genre;
 import demo.facts.Rating;
 import dtos.BookDto;
 
@@ -36,15 +37,16 @@ public class BooksController {
         return new ResponseEntity<>(booksService.review(reviewDto), HttpStatus.OK);
     }
     @GetMapping(value = "/recommend-unauthorized", produces = "application/json")
-    public ResponseEntity<List<Book>> getRecommendedUnauthorized() {
+    public ResponseEntity<List<BookDto>> getRecommendedUnauthorized() {
         return new ResponseEntity<>(booksService.getRecommendedUnauthorized(), HttpStatus.OK);
     }
     @GetMapping(value = "/books/categories",produces = "application/json")
-    public ResponseEntity<List<BookCategory>> getPossibleCategories() {
-        return new ResponseEntity<>(booksService.getAllBookCategories(), HttpStatus.OK);
+    public ResponseEntity<List<Genre>> getPossibleCategories() {
+        return new ResponseEntity<>(booksService.getAllBookGenres(), HttpStatus.OK);
     }
 
-    public ResponseEntity<List<Book>> getReccommendedAuthorized(){
+    @GetMapping(value = "/recommend-authorized",produces = "application/json")
+    public ResponseEntity<List<BookDto>> getReccommendedAuthorized(){
         return new ResponseEntity<>(booksService.getReccommendedAuthorized(),HttpStatus.OK);
     }
 }

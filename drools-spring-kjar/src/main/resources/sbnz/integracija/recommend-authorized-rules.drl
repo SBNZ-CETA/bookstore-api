@@ -7,18 +7,27 @@ import java.util.ArrayList;
 rule "New User if less than 10 books rated AND has favorite Genres"
     agenda-group "userState"
         when
-            $u : User($u.getRatingNumber < 10, $u.hasFavoriteGenres == true)
+            $u : User($u.getRatingNumber < 10, $u.hasFavoriteGenres == true , $u.getState !=UserState.NEW_WITH_GENRES)
         then
-            modify($u){setState(UserState.NEW_WITH_GENRES)}
+            System.out.println("NEW_WITH_GENRES");
+            modify($u){setState(UserState.NEW_WITH_GENRES)};
     end
-// rule "New User if less than 10 books rate AND NO favorite Genres"
-//     agenda-group "userState"
-//     when
-//         $u : User(getBooks < 10)
-//     then
 
-// rule "Old User if more than 10 books rated"
-//     agenda-group "userState"
-//     when
-//         $u : User(getBooks < 10)
-//     then
+rule "New User if less than 10 books rate AND NO favorite Genres"
+    agenda-group "userState"
+        when
+            $u : User($u.getRatingNumber < 10, $u.hasFavoriteGenres == false , $u.getState !=UserState.NEW)
+        then
+            System.out.println("NEW");
+            modify($u){setState(UserState.NEW)};
+    end
+
+rule "Old User if more than 10 books rated"
+    agenda-group "userState"
+        when
+            $u : User($u.getRatingNumber >= 10, $u.getState !=UserState.OLD)
+        then
+            System.out.println("OLD");
+            modify($u){setState(UserState.OLD)};
+    end
+

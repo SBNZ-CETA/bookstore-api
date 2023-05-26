@@ -1,10 +1,7 @@
 package sbnz.integracija.example;
 
-import demo.facts.Book;
 import demo.facts.Order;
-import demo.facts.OrderItem;
 import dtos.OrderDto;
-import dtos.OrderItemDto;
 import org.kie.api.KieServices;
 import org.kie.api.builder.KieScanner;
 import org.kie.api.runtime.KieContainer;
