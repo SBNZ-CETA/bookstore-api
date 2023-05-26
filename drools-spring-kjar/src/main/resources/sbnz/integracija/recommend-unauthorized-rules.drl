@@ -1,0 +1,141 @@
+package sbnz.integracija;
+import demo.facts.RateUnit;
+import demo.facts.Book;
+import demo.facts.UnauthorizedRecommendedBooks;
+import java.time.LocalDate;
+import java.util.ArrayList;
+
+rule "New if added to bookstore in last month"
+      agenda-group "newBook"
+      when
+          $b : Book(releaseDate > LocalDate.now().minusMonths(1))
+      then
+          System.out.println("Nova releaseDate");
+          System.out.println($b);
+          modify($b){setNew(true)};
+
+  end
+
+  rule "New if published in last 6 month"
+      agenda-group "newBook"
+      when
+          $b : Book(publishDate > LocalDate.now().minusMonths(6))
+      then
+          modify($b){setNew(true)};
+
+  end
+
+  rule "Popular if has 20 or more rates"
+      agenda-group "popularBook"
+      when
+          $b : Book(rateCount > 19)
+      then
+          modify($b){setPopular(true)};
+
+  end
+
+  rule "Popular if new and has 10 or more rates"
+      agenda-group "popularBook"
+      when
+          $b : Book(rateCount > 9, isNew() == true)
+      then
+          System.out.println("Popularna");
+          modify($b){setPopular(true)};
+
+  end
+
+  rule "Good if rating is 4 or more"
+      agenda-group "bookRate"
+      when
+          $b : Book(rating >= 4.)
+      then
+          System.out.println("Dobra");
+          modify($b){setRateUnit(RateUnit.GOOD)};
+
+  end
+
+  rule "Bad if rating is 2.5 or less"
+      agenda-group "bookRate"
+      when
+          $b : Book(rating <= 2.5)
+      then
+          System.out.println("Losa");
+          modify($b){setRateUnit(RateUnit.BAD)};
+
+  end
+//
+  rule "Neutral if rating is between 2.5 and 4"
+      agenda-group "bookRate"
+      when
+          $b : Book(rating > 2.5, rating < 4)
+      then
+          System.out.println("Neutralna");
+          modify($b){setRateUnit(RateUnit.NEUTRAL)};
+
+  end
+
+  rule "Neutral if has no rating"
+      agenda-group "bookRate"
+      when
+          $b : Book(rateCount == 0)
+      then
+          modify($b){setRateUnit(RateUnit.NEUTRAL)};
+
+  end
+
+  rule "Recommend if popular and good"
+      agenda-group "recommendBook"
+      when
+          $b : Book(isPopular() == true, rateUnit == RateUnit.GOOD)
+          $l : UnauthorizedRecommendedBooks(!books.contains($b))
+      then
+          System.out.println("Dodata");
+          $l.add($b);
+
+  end
+//
+  rule "Recommend if popular and neutral"
+      agenda-group "recommendBook"
+      when
+          $b : Book(isPopular(), rateUnit == RateUnit.NEUTRAL)
+          $l : UnauthorizedRecommendedBooks(!books.contains($b))
+      then
+          $l.add($b);
+
+  end
+
+  rule "Recommend if new"
+      agenda-group "recommendBook"
+      when
+          $b : Book(isNew())
+          $l : UnauthorizedRecommendedBooks(!books.contains($b))
+      then
+          $l.add($b);
+          System.out.println("Nova");
+          System.out.println($l.getBooks().size());
+
+  end
+
+  rule "Remove badly rated books if recommended list longer than 10"
+      agenda-group "recommendBook"
+      salience -1
+      when
+          $l : UnauthorizedRecommendedBooks($books: books != null)
+          eval($books.size() > 10)
+      then
+          System.out.println("Uklonio losu");
+          $l.removeBadlyRatedBooks();
+
+  end
+
+  rule "Pick 10 books if no badly rated books in recommended list longer than 10"
+      agenda-group "recommendBook"
+      salience -2
+      when
+          $l : UnauthorizedRecommendedBooks($books: books != null)
+          eval($books.size() > 10)
+      then
+          System.out.println("Uklonio random");
+          $l.pickTenBooks();
+
+  end

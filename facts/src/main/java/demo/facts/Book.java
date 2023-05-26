@@ -3,6 +3,7 @@ package demo.facts;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "books")
@@ -21,6 +22,21 @@ public class Book {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private BookCategory category;
+    @Column
+    private LocalDateTime publishDate;
+    @Column
+    private LocalDateTime releaseDate;
+    @Column
+    private Double rating;
+    @Column
+    private int rateCount;
+    @Transient
+    private boolean isNew;
+    @Transient
+    private boolean isPopular;
+    @Transient
+    @Enumerated(EnumType.STRING)
+    private RateUnit rateUnit;
 
     public Book() {}
     public Book(String title, String writer, Double cost) {
@@ -47,5 +63,10 @@ public class Book {
 
     public void setCategory(BookCategory category) {
         this.category = category;
+    }
+
+    public void addNewRating(int rating){
+        this.rating = ((this.rateCount*this.rating) + rating) / (this.rateCount + 1);
+        this.rateCount = this.rateCount + 1;
     }
 }
