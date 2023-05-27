@@ -22,8 +22,9 @@ public class Book {
     private Long id;
     @Column
     private String title;
-    @Column
-    private String writer;
+    @ManyToOne ( fetch = FetchType.LAZY)
+    @JoinColumn(name = "writer_id")
+    private Writer writer;
     @Column
     private Double cost;
     @Enumerated(EnumType.STRING)
@@ -46,7 +47,7 @@ public class Book {
     private RateUnit rateUnit;
 
     public Book() {}
-    public Book(String title, String writer, Double cost) {
+    public Book(String title, Writer writer, Double cost) {
         this.title = title;
         this.writer = writer;
         this.cost = cost;

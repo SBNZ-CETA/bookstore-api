@@ -8,8 +8,6 @@ import demo.facts.Rating;
 import demo.facts.UnauthorizedRecommendedBooks;
 import demo.facts.User;
 import demo.facts.UserState;
-import dtos.BookDto;
-import dtos.RatingDto;
 import lombok.AllArgsConstructor;
 
 import org.dmg.pmml.Model;
@@ -19,7 +17,9 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import sbnz.integracija.example.dto.BookCreateDto;
+import sbnz.integracija.example.dto.BookDto;
 import sbnz.integracija.example.dto.BookReviewDto;
+import sbnz.integracija.example.dto.RatingDto;
 import sbnz.integracija.example.repository.BooksRepository;
 import sbnz.integracija.example.repository.GenreRepository;
 import sbnz.integracija.example.repository.RatingRepository;
@@ -28,10 +28,7 @@ import sbnz.integracija.example.utils.UserUtils;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @Service
 @AllArgsConstructor
@@ -45,12 +42,11 @@ public class BooksService {
    private final KieContainer kieContainer;
 
    public List<BookDto> getAllBookDtos() {
-        List<Book> books = booksRepository.findAll();
-        List<BookDto> booksDto = booksTobooksDto(books);
-       return booksDto;
+        List<Book> books = getAll();
+       return booksTobooksDto(books);
    }
 
-    public List<Book> getAll() {
+    private List<Book> getAll() {
         return booksRepository.findAll();
     }
 
@@ -161,22 +157,6 @@ public class BooksService {
             });
         return booksDto;
     }
-
-    // private List<BookDto> booksTobooksDto(List<Book> books) {
-    //     List<BookDto> booksDto = new ArrayList<>();
-    //         books.stream().forEach(book -> { 
-    //             Set<Rating> ratings = book.getRatings();
-    //             Set<RatingDto> ratingsDto = new HashSet<>();
-    //             ratings.stream().forEach(rating -> {
-    //                 ratingsDto.add(new RatingDto(rating.getId(),rating.getUser().getId(),rating.getBook().getId(),rating.getRate()));
-    //             });
-    //             BookDto dto = new BookDto(book);
-    //             dto.setRatings(ratingsDto);
-    //             booksDto.add(dto);
-    //         });
-    //     return booksDto;
-    // }
-
 }
 
 

@@ -1,17 +1,18 @@
 package sbnz.integracija.example.controller;
 
-import dtos.RegisterDto;
 import lombok.AllArgsConstructor;
 
 import javax.annotation.security.RolesAllowed;
 
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
+import sbnz.integracija.example.dto.RegisterDto;
 import sbnz.integracija.example.service.UserService;
 
 @RestController
-@RequestMapping(path="/users")
 @AllArgsConstructor
+@RequestMapping(path="/users")
 @CrossOrigin("http://localhost:4200")
 public class UserController {
 

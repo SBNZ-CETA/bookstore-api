@@ -1,4 +1,4 @@
-package dtos;
+package sbnz.integracija.example.dto;
 
 import demo.facts.PaymentType;
 import lombok.Data;

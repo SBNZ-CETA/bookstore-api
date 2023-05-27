@@ -1,4 +1,4 @@
-package dtos;
+package sbnz.integracija.example.dto;
 
 import demo.facts.Rating;
 import lombok.AllArgsConstructor;

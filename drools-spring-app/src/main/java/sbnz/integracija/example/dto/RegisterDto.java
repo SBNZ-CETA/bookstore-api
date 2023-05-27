@@ -1,4 +1,4 @@
-package dtos;
+package sbnz.integracija.example.dto;
 
 import java.util.List;
 

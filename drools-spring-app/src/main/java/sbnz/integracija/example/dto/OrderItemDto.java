@@ -1,4 +1,4 @@
-package dtos;
+package sbnz.integracija.example.dto;
 
 import demo.facts.Book;
 import demo.facts.BookCategory;

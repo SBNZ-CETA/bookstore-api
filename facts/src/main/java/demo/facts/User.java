@@ -40,6 +40,7 @@ public class User implements UserDetails {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private Set<Rating> ratings;
 
+    
     @ManyToMany
     public Set<Genre> favoriteGenres;
 

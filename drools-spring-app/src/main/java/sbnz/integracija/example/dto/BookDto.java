@@ -1,4 +1,4 @@
-package dtos;
+package sbnz.integracija.example.dto;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
@@ -14,7 +14,7 @@ import lombok.Data;
 public class BookDto {
     private Long id;
     private String title;
-    private String writer;
+    private WriterDto writer;
     private Double cost;
     private BookCategory category;
     private LocalDateTime publishDate;
@@ -35,7 +35,7 @@ public class BookDto {
 
         this.id = book.getId();
         this.title = book.getTitle();
-        this.writer = book.getWriter();
+        this.writer = new WriterDto(book.getWriter());
         this.cost = book.getCost();
         this.category = book.getCategory();
         this.publishDate = book.getPublishDate();

@@ -1,17 +1,15 @@
 package sbnz.integracija.example.controller;
 
 import demo.facts.Book;
-import demo.facts.BookCategory;
 import demo.facts.Genre;
 import demo.facts.Rating;
-import dtos.BookDto;
 
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import sbnz.integracija.example.dto.BookCreateDto;
+import sbnz.integracija.example.dto.BookDto;
 import sbnz.integracija.example.dto.BookReviewDto;
 import sbnz.integracija.example.service.BooksService;
 
