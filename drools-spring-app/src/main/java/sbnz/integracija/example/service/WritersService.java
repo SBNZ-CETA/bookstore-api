@@ -6,8 +6,8 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import demo.facts.Writer;
+import dtos.WriterDto;
 import lombok.AllArgsConstructor;
-import sbnz.integracija.example.dto.WriterDto;
 import sbnz.integracija.example.repository.WritersRepository;
 
 @Service

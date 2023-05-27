@@ -6,8 +6,8 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import demo.facts.Genre;
+import dtos.GenreDto;
 import lombok.AllArgsConstructor;
-import sbnz.integracija.example.dto.GenreDto;
 import sbnz.integracija.example.repository.GenreRepository;
 
 

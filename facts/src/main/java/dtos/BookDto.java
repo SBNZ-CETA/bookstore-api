@@ -1,4 +1,4 @@
-package sbnz.integracija.example.dto;
+package dtos;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
@@ -16,7 +16,7 @@ public class BookDto {
     private String title;
     private WriterDto writer;
     private Double cost;
-    private BookCategory category;
+    private GenreDto genre;
     private LocalDateTime publishDate;
     private LocalDateTime releaseDate;
     private Set<RatingDto> ratings;
@@ -37,7 +37,7 @@ public class BookDto {
         this.title = book.getTitle();
         this.writer = new WriterDto(book.getWriter());
         this.cost = book.getCost();
-        this.category = book.getCategory();
+        this.genre = new GenreDto(book.getGenre());
         this.publishDate = book.getPublishDate();
         this.releaseDate = book.getReleaseDate();
         this.rating = book.getRating();

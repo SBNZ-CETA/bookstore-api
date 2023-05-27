@@ -1,7 +1,9 @@
 package sbnz.integracija.example;
 
 import demo.facts.Order;
-import sbnz.integracija.example.dto.OrderDto;
+import dtos.OrderDto;
+import lombok.AllArgsConstructor;
+import sbnz.integracija.example.service.RatingsService;
 
 import org.kie.api.KieServices;
 import org.kie.api.builder.KieScanner;
@@ -24,11 +26,15 @@ import java.util.Collections;
 
 @SpringBootApplication
 @EntityScan("demo.facts")
+@AllArgsConstructor
 public class BookstoreApp {
 
 	public static void main(String[] args) {
 		SpringApplication.run(BookstoreApp.class, args);
+		
 	}
+
+	
 
 	@Bean
 	public KieContainer kieContainer() {

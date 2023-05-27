@@ -7,7 +7,7 @@ import javax.annotation.security.RolesAllowed;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import sbnz.integracija.example.dto.RegisterDto;
+import dtos.RegisterDto;
 import sbnz.integracija.example.service.UserService;
 
 @RestController

@@ -3,6 +3,7 @@ package sbnz.integracija.example.service;
 import demo.facts.Genre;
 import demo.facts.User;
 import demo.facts.UserType;
+import dtos.RegisterDto;
 import javassist.NotFoundException;
 import lombok.AllArgsConstructor;
 
@@ -15,7 +16,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import sbnz.integracija.example.dto.RegisterDto;
 import sbnz.integracija.example.repository.GenreRepository;
 import sbnz.integracija.example.repository.UserRepository;
 import sbnz.integracija.example.utils.EmailValidator;

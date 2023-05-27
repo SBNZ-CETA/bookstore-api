@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import dtos.RatingDto;
 import lombok.AllArgsConstructor;
-import sbnz.integracija.example.dto.RatingDto;
 import sbnz.integracija.example.service.RatingsService;
 
 @RestController
@@ -27,5 +27,5 @@ public class RatingController {
     public ResponseEntity<List<RatingDto>> getAll() {
        return new ResponseEntity<>(ratingsService.getAllRatingDtos(), HttpStatus.OK);
     }
-
+    
 }

@@ -1,4 +1,4 @@
-package sbnz.integracija.example.dto;
+package dtos;
 
 import demo.facts.Book;
 import demo.facts.BookCategory;
@@ -7,7 +7,7 @@ import lombok.Data;
 @Data
 public class OrderItemDto {
     private Long bookId;
-    private BookCategory bookCategory;
+    private GenreDto genre;
     private Integer quantity;
     private Double price;
 
@@ -16,7 +16,7 @@ public class OrderItemDto {
 
     public OrderItemDto(OrderItemDto orderItemDto) {
         this.bookId = orderItemDto.getBookId();
-        this.bookCategory = orderItemDto.getBookCategory();
+        this.genre = orderItemDto.getGenre();
         this.quantity = orderItemDto.getQuantity();
         this.price = orderItemDto.getPrice();
     }

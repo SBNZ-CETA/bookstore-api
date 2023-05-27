@@ -5,8 +5,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import sbnz.integracija.example.dto.CreateOrderDto;
-import sbnz.integracija.example.dto.OrderDto;
+import dtos.CreateOrderDto;
+import dtos.OrderDto;
 import sbnz.integracija.example.service.OrderService;
 
 @RestController

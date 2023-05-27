@@ -1,4 +1,4 @@
-package sbnz.integracija.example.dto;
+package dtos;
 
 import demo.facts.Writer;
 import lombok.Data;

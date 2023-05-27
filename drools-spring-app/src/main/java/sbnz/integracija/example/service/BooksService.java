@@ -8,6 +8,10 @@ import demo.facts.Rating;
 import demo.facts.UnauthorizedRecommendedBooks;
 import demo.facts.User;
 import demo.facts.UserState;
+import dtos.BookCreateDto;
+import dtos.BookDto;
+import dtos.BookReviewDto;
+import dtos.RatingDto;
 import lombok.AllArgsConstructor;
 
 import org.dmg.pmml.Model;
@@ -16,10 +20,7 @@ import org.kie.api.runtime.KieSession;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import sbnz.integracija.example.dto.BookCreateDto;
-import sbnz.integracija.example.dto.BookDto;
-import sbnz.integracija.example.dto.BookReviewDto;
-import sbnz.integracija.example.dto.RatingDto;
+
 import sbnz.integracija.example.repository.BooksRepository;
 import sbnz.integracija.example.repository.GenreRepository;
 import sbnz.integracija.example.repository.RatingRepository;
@@ -29,6 +30,7 @@ import sbnz.integracija.example.utils.UserUtils;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @Service
 @AllArgsConstructor
@@ -37,6 +39,7 @@ public class BooksService {
    private final UserRepository userRepository;
    private final RatingRepository ratingRepository;
    private final GenreRepository genreRepository;
+   private final RatingsService ratingsService;
    private final UserUtils userUtils;
    private final ModelMapper modelMapper;
    private final KieContainer kieContainer;
@@ -74,25 +77,9 @@ public class BooksService {
 
        rating = ratingRepository.save(rating);
     
-       book = rateBook(book);
+       book = ratingsService.rateBook(book);
        booksRepository.save(book);
        return rating;
-    }
-
-    private Book rateBook(Book book){
-        List<Rating> ratings= ratingRepository.FindAllByBookId(book.getId()).orNull();
-        int ratingCount=0;
-        double totalRating=0;
-        
-        for(Rating rate:ratings){
-            ratingCount++;
-            totalRating+=rate.getRate();
-        }
-        totalRating = totalRating/ratingCount;
-        
-        book.setRateCount(ratingCount);
-        book.setRating(totalRating);
-        return book;
     }
 
     public List<BookDto> getRecommendedUnauthorized() {
@@ -126,15 +113,22 @@ public class BooksService {
         System.out.println("INSIDE AUTHROIZED RECCOMMEND");
         Long userId = userUtils.getLoggedId();
         User user = userRepository.getOne(userId);
+        UnauthorizedRecommendedBooks unauthorizedRecommendedBooks = new UnauthorizedRecommendedBooks();
         System.out.println(user.getFavoriteGenres());
 
         KieSession kieSession = kieContainer.newKieSession();
         kieSession.insert(user);
         System.out.println("RUN KIE SESSION");
+
         kieSession.getAgenda().getAgendaGroup("userState").setFocus();
         kieSession.fireAllRules();
+
         if(user.getState()==UserState.NEW) return getRecommendedUnauthorized();
         if(user.getState()==UserState.NEW_WITH_GENRES){
+            Set<Genre> favoriteGenres = user.getFavoriteGenres();
+            favoriteGenres.stream().forEach(genre->{
+                kieSession.insert(genre);
+            });
             // LEE PRAVILA
             // kieSession.getAgenda().getAgendaGroup("userState").setFocus();
             // kieSession.fireAllRules();

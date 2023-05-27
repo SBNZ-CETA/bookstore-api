@@ -54,7 +54,7 @@ rule "Educative-book"
     agenda-group "itemDiscount"
     lock-on-active true
     when
-        $oi : OrderItemDto(price > 2000,bookCategory == BookCategory.EDUCATION )
+        $oi : OrderItemDto(price > 2000, genre.name == "Education" )
     then
         insert (new Double($oi.getPrice() * 0.93));
 end

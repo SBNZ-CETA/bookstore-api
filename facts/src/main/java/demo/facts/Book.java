@@ -27,9 +27,9 @@ public class Book {
     private Writer writer;
     @Column
     private Double cost;
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private BookCategory category;
+    @ManyToOne
+    @JoinColumn(name = "genre_id")
+    private Genre genre;
     @Column
     private LocalDateTime publishDate;
     @Column
@@ -65,12 +65,12 @@ public class Book {
         this.cost = cost;
     }
 
-    public BookCategory getCategory() {
-        return category;
+    public Genre getGenre() {
+        return genre;
     }
 
-    public void setCategory(BookCategory category) {
-        this.category = category;
+    public void setCategory(Genre genre) {
+        this.genre = genre;
     }
 
     // public void addNewRating(int rating){
