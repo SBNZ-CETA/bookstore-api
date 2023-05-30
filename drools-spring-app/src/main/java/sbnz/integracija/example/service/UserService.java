@@ -4,11 +4,14 @@ import demo.facts.Genre;
 import demo.facts.User;
 import demo.facts.UserType;
 import dtos.RegisterDto;
+import dtos.UserRatingsDto;
 import javassist.NotFoundException;
 import lombok.AllArgsConstructor;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

@@ -15,6 +15,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.Objects;
+
 @NoArgsConstructor
 @Entity
 @Table(name = "ratings")
@@ -42,4 +44,10 @@ public class Rating {
         this.user = new User(user_id);
         this.rate = rate;
     }
+
+    @Override
+    public boolean equals(Object o) {
+       return this.book.getId().equals(((Rating)o).book.getId());
+    }
+
 }

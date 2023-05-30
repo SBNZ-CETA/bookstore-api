@@ -8,13 +8,11 @@ import demo.facts.Rating;
 import demo.facts.UnauthorizedRecommendedBooks;
 import demo.facts.User;
 import demo.facts.UserState;
-import dtos.BookCreateDto;
-import dtos.BookDto;
-import dtos.BookReviewDto;
-import dtos.RatingDto;
+import dtos.*;
 import lombok.AllArgsConstructor;
 
 import org.dmg.pmml.Model;
+import org.kie.api.runtime.ClassObjectFilter;
 import org.kie.api.runtime.KieContainer;
 import org.kie.api.runtime.KieSession;
 import org.modelmapper.ModelMapper;
@@ -29,8 +27,10 @@ import sbnz.integracija.example.utils.UserUtils;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -99,8 +99,6 @@ public class BooksService {
         kieSession.fireAllRules();
         kieSession.getAgenda().getAgendaGroup("recommendBook").setFocus();
         kieSession.fireAllRules();
-//        kieSession.getAgenda().getAgendaGroup("filterBooks").setFocus();
-//        kieSession.fireAllRules();
         kieSession.dispose();
         return booksTobooksDto(unauthorizedRecommendedBooks.getBooks());
     }
@@ -118,9 +116,12 @@ public class BooksService {
 
         KieSession kieSession = kieContainer.newKieSession();
         kieSession.insert(user);
+        kieSession.insert(this.getAllOtherUserRatings(user.getUsername()));
+
         System.out.println("RUN KIE SESSION");
 
         kieSession.getAgenda().getAgendaGroup("userState").setFocus();
+        kieSession.getAgenda().getAgendaGroup("oldUser").setFocus();
         kieSession.fireAllRules();
 
         if(user.getState()==UserState.NEW) return getRecommendedUnauthorized();
@@ -138,8 +139,9 @@ public class BooksService {
             // kieSession.getAgenda().getAgendaGroup("userState").setFocus();
             // kieSession.fireAllRules();
         }
+        Collection<Book> books = (Collection<Book>)kieSession.getObjects(new ClassObjectFilter(Book.class));
         kieSession.dispose();
-        return null;
+        return booksTobooksDto(books.stream().collect(Collectors.toList()));
     }
 
 
@@ -150,6 +152,15 @@ public class BooksService {
                 booksDto.add(dto);
             });
         return booksDto;
+    }
+
+    public List<UserRatingsDto> getAllOtherUserRatings(String username) {
+        return userRepository
+                .findAll()
+                .stream()
+                .filter(user -> !user.getUsername().equals(username))
+                .map(user -> new UserRatingsDto(user.getRatings()))
+                .collect(Collectors.toList());
     }
 }
 

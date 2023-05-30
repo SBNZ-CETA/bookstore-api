@@ -3,6 +3,8 @@ import demo.facts.User;
 import demo.facts.UserState
 import java.time.LocalDate;
 import java.util.ArrayList;
+import dtos.UserRatingsDto
+import demo.facts.Book;
 
 rule "New User if less than 10 books rated AND has favorite Genres"
     agenda-group "userState"
@@ -31,3 +33,19 @@ rule "Old User if more than 10 books rated"
             modify($u){setState(UserState.OLD)};
     end
 
+rule "Evaluate similar users"
+    agenda-group "oldUser"
+        when
+            $u: User(getState == UserState.OLD)
+            $r: UserRatingsDto(getCorrelationCoefficient($u.getRatings()) < 0.5)
+        then
+            delete($r);
+end
+
+rule "Insert books that are rated by similar users"
+    agenda-group "oldUser"
+        when
+           $b: UserRatingsDto()
+        then
+            System.out.println($b);
+end
