@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import demo.facts.Writer;
 import dtos.WriterDto;
+import javassist.NotFoundException;
 import lombok.AllArgsConstructor;
 import sbnz.integracija.example.repository.WritersRepository;
 
@@ -32,5 +33,13 @@ public class WritersService {
                 writerDtos.add(dto);
             });
         return writerDtos;
+    }
+
+    public int getWriterRating(Long id) {
+        System.out.println(id);
+        Writer writer = writersRepository.findById(id).orElse(null);
+        int sum = writer.getWriterRatingSum();
+        System.out.println(sum);
+        return sum;
     }
 }

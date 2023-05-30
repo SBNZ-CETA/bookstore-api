@@ -1,7 +1,7 @@
 package sbnz.integracija.example.service;
 
+import demo.facts.AuthorizedRecommendedFavoriteGenreBooks;
 import demo.facts.Book;
-import demo.facts.BookCategory;
 import demo.facts.Genre;
 import demo.facts.RateUnit;
 import demo.facts.Rating;
@@ -11,25 +11,23 @@ import demo.facts.UserState;
 import dtos.*;
 import lombok.AllArgsConstructor;
 
-import org.dmg.pmml.Model;
 import org.kie.api.runtime.ClassObjectFilter;
 import org.kie.api.runtime.KieContainer;
 import org.kie.api.runtime.KieSession;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import sbnz.integracija.example.repository.BooksRepository;
 import sbnz.integracija.example.repository.GenreRepository;
 import sbnz.integracija.example.repository.RatingRepository;
 import sbnz.integracija.example.repository.UserRepository;
+import sbnz.integracija.example.repository.WritersRepository;
 import sbnz.integracija.example.utils.UserUtils;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -40,6 +38,7 @@ public class BooksService {
    private final RatingRepository ratingRepository;
    private final GenreRepository genreRepository;
    private final RatingsService ratingsService;
+   private final WritersRepository writersRepository;
    private final UserUtils userUtils;
    private final ModelMapper modelMapper;
    private final KieContainer kieContainer;
@@ -108,22 +107,33 @@ public class BooksService {
     }
 
     public List<BookDto> getReccommendedAuthorized() {
+        System.out.println("INSIDE AUTHROIZED RECCOMMEND");
+
         Long userId = userUtils.getLoggedId();
         User user = userRepository.getOne(userId);
-        System.out.println(user.getFavoriteGenres());
+        AuthorizedRecommendedFavoriteGenreBooks authorizedRecommendedFavoriteGenreBooks = new AuthorizedRecommendedFavoriteGenreBooks();
+
+
 
         KieSession kieSession = kieContainer.newKieSession();
         kieSession.insert(user);
         this.getAllOtherUserRatings(user.getUsername()).forEach(kieSession::insert);
+        kieSession.insert(authorizedRecommendedFavoriteGenreBooks);
+        writersRepository.findAll().stream().forEach(writer -> { kieSession.insert(writer);});
 
         kieSession.getAgenda().getAgendaGroup("userState").setFocus();
-        kieSession.fireAllRules();
-        kieSession.getAgenda().getAgendaGroup("oldUser").setFocus();
         kieSession.fireAllRules();
 
         if(user.getState()==UserState.NEW) return getRecommendedUnauthorized();
 
+        kieSession.getAgenda().getAgendaGroup("oldUser").setFocus();
+        kieSession.fireAllRules();
+        kieSession.getAgenda().getAgendaGroup("newGenreUser").setFocus();
+        kieSession.fireAllRules();
+
+
         Collection<Book> books = (Collection<Book>)kieSession.getObjects(new ClassObjectFilter(Book.class));
+
         kieSession.dispose();
         return booksTobooksDto(new ArrayList<>(books));
     }

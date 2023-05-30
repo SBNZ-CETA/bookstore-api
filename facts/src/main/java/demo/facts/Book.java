@@ -5,7 +5,6 @@ import java.time.LocalDateTime;
 import java.util.Set;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -51,6 +50,13 @@ public class Book {
         this.title = title;
         this.writer = writer;
         this.cost = cost;
+    }
+
+
+    public int getBookRatingSum(){
+        return ratings.stream()
+        .map(x -> x.getRate())
+        .reduce(0, Integer::sum);
     }
 
     public Book(Long id) {
