@@ -132,6 +132,17 @@ public class BooksService {
         kieSession.fireAllRules();
 
 
+       
+        System.out.println("FINISHED KIE SESSION");
+        System.out.println("ALL ");
+        authorizedRecommendedFavoriteGenreBooks.getAllWriters().stream().forEach( w ->{  System.out.println(w.getName());});
+        System.out.println("BEST ");
+        authorizedRecommendedFavoriteGenreBooks.getTopWriters().stream().forEach( w ->{  System.out.println(w.getName());});
+        System.out.println("BOOKS ");
+        authorizedRecommendedFavoriteGenreBooks.getAllBooks().stream().forEach( b ->{  System.out.println(b.getTitle() + " = " + b.getRating());});
+        System.out.println("BEST BOOKS");
+        authorizedRecommendedFavoriteGenreBooks.getTopBooks().stream().forEach( b ->{  System.out.println(b.getTitle()+ " = " + b.getRating());});
+
         Collection<Book> books = (Collection<Book>)kieSession.getObjects(new ClassObjectFilter(Book.class));
 
         kieSession.dispose();

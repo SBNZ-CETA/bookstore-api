@@ -3,7 +3,6 @@ package demo.facts;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 import lombok.Data;
@@ -13,6 +12,7 @@ public class AuthorizedRecommendedFavoriteGenreBooks {
     private List<Writer> allWriters= new ArrayList<>();
     private List<Writer> topWriters= new ArrayList<>();
     private List<Book> allBooks = new ArrayList<>();
+    private List<Book> topBooks = new ArrayList<>();
 
     public void addWriter(Writer writer){
         List<Writer> list = allWriters.stream().filter(w -> w.getId()==writer.getId()).collect(Collectors.toList());
@@ -30,6 +30,10 @@ public class AuthorizedRecommendedFavoriteGenreBooks {
         if(list.isEmpty()) allBooks.add(book);
     }
 
+    public void addPopularBook(Book book){
+       topBooks.add(book);
+    }
+
     public Writer getPopularWriterAndDelete(){
         Writer mostPopular = allWriters.stream()
             .min(Comparator.comparing(Writer::getWriterRatingSum))
@@ -39,6 +43,18 @@ public class AuthorizedRecommendedFavoriteGenreBooks {
             return mostPopular;
         }else{
             return new Writer(true);
+        }  
+    }
+
+    public Book getPopularBookAndDelete(){
+        Book mostPopular = allBooks.stream()
+            .min(Comparator.comparing(Book::getRating))
+            .orElse(null);
+        if (mostPopular!= null) {
+            allBooks.remove(mostPopular);
+            return mostPopular;
+        }else{
+            return new Book(true);
         }
        
     }

@@ -44,8 +44,13 @@ public class Book {
     @Transient
     @Enumerated(EnumType.STRING)
     private RateUnit rateUnit;
+    @Transient
+    private boolean isEmpty = false;
 
     public Book() {}
+    public Book(boolean empty) {
+        this.isEmpty = empty;
+    }
     public Book(String title, Writer writer, Double cost) {
         this.title = title;
         this.writer = writer;

@@ -108,6 +108,23 @@ rule "Add Books from Top Writers"
             $l.addBook($b);
     end
 
+rule "Get Best Books"
+    agenda-group "newGenreUser"
+        when
+            $l : AuthorizedRecommendedFavoriteGenreBooks(topWriters.size()<10 , $t: topWriters)
+            $i : Book() from $l.getAllBooks()
+            $b : Book($b.isEmpty()== false) from $l.getPopularBookAndDelete()
+        then
+            System.out.println("ENTERD THEN POPULAR BOOK");
+            System.out.println($b.getTitle());
+            System.out.println($b.getRating());
+            if ($l.getTopBooks().size() < 10) {
+                System.out.println("ADDED POPULAR BOOK");
+                $l.addPopularBook($b);
+            }
+    end
+
+
 // rule "Find 4 Most Popular Writers"
 //     agenda-group "newGenreUser"
 //         when
