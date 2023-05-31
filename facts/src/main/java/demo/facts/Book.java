@@ -5,7 +5,6 @@ import java.time.LocalDateTime;
 import java.util.Set;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -45,12 +44,24 @@ public class Book {
     @Transient
     @Enumerated(EnumType.STRING)
     private RateUnit rateUnit;
+    @Transient
+    private boolean isEmpty = false;
 
     public Book() {}
+    public Book(boolean empty) {
+        this.isEmpty = empty;
+    }
     public Book(String title, Writer writer, Double cost) {
         this.title = title;
         this.writer = writer;
         this.cost = cost;
+    }
+
+
+    public int getBookRatingSum(){
+        return ratings.stream()
+        .map(x -> x.getRate())
+        .reduce(0, Integer::sum);
     }
 
     public Book(Long id) {

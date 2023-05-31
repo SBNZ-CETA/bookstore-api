@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -24,5 +25,10 @@ public class WritersController {
     @GetMapping(produces = "application/json")
     public ResponseEntity<List<WriterDto>> getAll() {
        return new ResponseEntity<>(writersService.getAllWriterDtos(), HttpStatus.OK);
+    }
+
+    @GetMapping(path = "/rating/{id}",produces = "application/json")
+    public ResponseEntity<Integer> getRatingFor(@PathVariable Long id) {
+       return new ResponseEntity<>(writersService.getWriterRating(id), HttpStatus.OK);
     }
 }
