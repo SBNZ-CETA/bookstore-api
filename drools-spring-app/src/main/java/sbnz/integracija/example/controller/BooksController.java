@@ -10,6 +10,7 @@ import dtos.BookReviewDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import sbnz.integracija.example.service.BooksService;
@@ -32,6 +33,7 @@ public class BooksController {
         return new ResponseEntity<>(booksService.create(newBook), HttpStatus.CREATED);
     }
     @PostMapping(value = "/review", produces = "application/json")
+    @PreAuthorize("hasAuthority('REGULAR')")
     public ResponseEntity<Rating> review(@RequestBody BookReviewDto reviewDto){
         return new ResponseEntity<>(booksService.review(reviewDto), HttpStatus.OK);
     }

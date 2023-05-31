@@ -15,6 +15,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name="users_table")
@@ -81,6 +82,10 @@ public class User implements UserDetails {
 
     public boolean hasRatedBook(Book book) {
         return this.ratings.stream().anyMatch(rating -> rating.getBook().getId().equals(book.getId()));
+    }
+
+    public List<Book> getLikedBooks(){
+        return this.ratings.stream().filter(rating -> rating.getRate() >= 4).map(rating -> rating.getBook()).collect(Collectors.toList());
     }
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
