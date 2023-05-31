@@ -13,9 +13,16 @@ import sbnz.integracija.example.service.UserService;
 public class UserUtils {
     private final UserService userService;
 
-    public long getLoggedId(){
+    public Long getLoggedId(){
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        var detailUser = (User)auth.getPrincipal();
+        User detailUser;
+
+        try {
+            detailUser = (User)auth.getPrincipal();
+        } catch(ClassCastException err) {
+           return null ;
+        }
+
         var user = userService.getByUsername(detailUser.getUsername());
         return user.getId();
     }

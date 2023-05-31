@@ -110,16 +110,16 @@ public class BooksService {
         System.out.println("INSIDE AUTHROIZED RECCOMMEND");
 
         Long userId = userUtils.getLoggedId();
+        if(userId == null) return getRecommendedUnauthorized();
+
         User user = userRepository.getOne(userId);
         AuthorizedRecommendedFavoriteGenreBooks authorizedRecommendedFavoriteGenreBooks = new AuthorizedRecommendedFavoriteGenreBooks();
-
-
 
         KieSession kieSession = kieContainer.newKieSession();
         kieSession.insert(user);
         this.getAllOtherUserRatings(user.getUsername()).forEach(kieSession::insert);
         kieSession.insert(authorizedRecommendedFavoriteGenreBooks);
-        writersRepository.findAll().stream().forEach(writer -> { kieSession.insert(writer);});
+        writersRepository.findAll().forEach(writer -> { kieSession.insert(writer);});
 
         kieSession.getAgenda().getAgendaGroup("userState").setFocus();
         kieSession.fireAllRules();
