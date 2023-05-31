@@ -1,13 +1,20 @@
 package demo.facts;
 
-import lombok.Data;
-
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.Set;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+
 
 @Entity
 @Table(name = "books")
-@Data
+@AllArgsConstructor
+@Getter
+@Setter
 public class Book {
 
     @Id
@@ -15,20 +22,21 @@ public class Book {
     private Long id;
     @Column
     private String title;
-    @Column
-    private String writer;
+    @ManyToOne ( fetch = FetchType.LAZY)
+    @JoinColumn(name = "writer_id")
+    private Writer writer;
     @Column
     private Double cost;
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private BookCategory category;
+    @ManyToOne
+    @JoinColumn(name = "genre_id")
+    private Genre genre;
     @Column
     private LocalDateTime publishDate;
     @Column
     private LocalDateTime releaseDate;
-    @Column
+    @OneToMany(mappedBy = "book", cascade = CascadeType.ALL)
+    private Set<Rating> ratings;
     private Double rating;
-    @Column
     private int rateCount;
     @Transient
     private boolean isNew;
@@ -39,7 +47,7 @@ public class Book {
     private RateUnit rateUnit;
 
     public Book() {}
-    public Book(String title, String writer, Double cost) {
+    public Book(String title, Writer writer, Double cost) {
         this.title = title;
         this.writer = writer;
         this.cost = cost;
@@ -57,16 +65,16 @@ public class Book {
         this.cost = cost;
     }
 
-    public BookCategory getCategory() {
-        return category;
+    public Genre getGenre() {
+        return genre;
     }
 
-    public void setCategory(BookCategory category) {
-        this.category = category;
+    public void setCategory(Genre genre) {
+        this.genre = genre;
     }
 
-    public void addNewRating(int rating){
-        this.rating = ((this.rateCount*this.rating) + rating) / (this.rateCount + 1);
-        this.rateCount = this.rateCount + 1;
-    }
+    // public void addNewRating(int rating){
+    //     this.rating = ((this.rateCount*this.rating) + rating) / (this.rateCount + 1);
+    //     this.rateCount = this.rateCount + 1;
+    // }
 }

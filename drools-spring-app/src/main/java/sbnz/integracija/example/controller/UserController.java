@@ -1,14 +1,18 @@
 package sbnz.integracija.example.controller;
 
-import dtos.RegisterDto;
 import lombok.AllArgsConstructor;
+
+import javax.annotation.security.RolesAllowed;
+
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
+import dtos.RegisterDto;
 import sbnz.integracija.example.service.UserService;
 
 @RestController
-@RequestMapping(path="/users")
 @AllArgsConstructor
+@RequestMapping(path="/users")
 @CrossOrigin("http://localhost:4200")
 public class UserController {
 
@@ -21,19 +25,21 @@ public class UserController {
 
     //PRIMERI ZA AUTHORIZATION!
     @GetMapping("/usr")
-    @PreAuthorize("hasAuthority('REGULAR')")
+    @RolesAllowed({"REGULAR"})
     public String userEndpoint(){
         return "YOUR USER";
     }
 
     @GetMapping("/adm")
-    @PreAuthorize("hasAuthority('ADMIN')")
+    // @PreAuthorize("hasAuthority('ADMIN')")
+    @RolesAllowed({"ADMIN"})
     public String adminEndpoint(){
         return "YOUR ADMIN";
     }
 
     @GetMapping("/usrAdm")
-    @PreAuthorize("hasAnyAuthority('ADMIN','REGULAR')")
+    // @PreAuthorize("hasAnyAuthority('ADMIN','REGULAR')")
+    @RolesAllowed({"ADMIN","REGULAR"})
     public String userAdminEndpoint(){
         return "YOUR USER or ADMIN";
     }

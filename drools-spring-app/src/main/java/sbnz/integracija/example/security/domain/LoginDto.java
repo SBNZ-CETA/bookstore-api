@@ -1,4 +1,4 @@
-package dtos;
+package sbnz.integracija.example.security.domain;
 
 import lombok.Data;
 

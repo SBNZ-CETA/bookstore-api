@@ -1,8 +1,11 @@
 package demo.facts;
 
 
-import lombok.Data;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -10,13 +13,15 @@ import org.springframework.security.core.userdetails.UserDetails;
 import javax.persistence.*;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
-@Data
 @Entity
 @Table(name="users_table")
 @NoArgsConstructor
+@Getter
+@Setter
+@AllArgsConstructor
 public class User implements UserDetails {
 
     @Id
@@ -32,15 +37,51 @@ public class User implements UserDetails {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private Set<Order> orders;
 
-    public User(String name, String surname, String email, String username, String password, UserType type) {
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private Set<Rating> ratings;
+
+    @ManyToMany
+    public Set<Genre> favoriteGenres;
+
+    @Transient
+    @Enumerated(EnumType.STRING)
+    private UserState state;
+
+    public User(String name, String surname, String email, String username, String password, UserType type, Set<Genre> favoriteGenres) {
         this.name = name;
         this.surname = surname;
         this.email = email;
         this.username = username;
         this.password = password;
         this.type = type;
+        this.favoriteGenres = favoriteGenres;
     }
 
+    public User(Long id) {
+        this.id = id;
+    }
+
+    public int getRatingNumber(){
+        return ratings.size();
+    }
+
+    public boolean hasFavoriteGenres(){
+        return !favoriteGenres.isEmpty();
+    }
+
+    public Set<Genre> getFavoriteGenres(){
+        return favoriteGenres;
+    }
+
+    public float getAvgRating() {
+        return (float)this.ratings
+                .stream()
+                .reduce(0, (subtotal, element) -> subtotal + element.getRate(), Integer::sum) / ratings.size();
+    }
+
+    public boolean hasRatedBook(Book book) {
+        return this.ratings.stream().anyMatch(rating -> rating.getBook().getId().equals(book.getId()));
+    }
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         SimpleGrantedAuthority authority = new SimpleGrantedAuthority(type.name());

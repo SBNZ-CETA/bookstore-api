@@ -1,0 +1,55 @@
+package sbnz.integracija;
+import demo.facts.User;
+import demo.facts.UserState
+import java.time.LocalDate;
+import java.util.ArrayList;
+import dtos.UserRatingsDto
+import demo.facts.Book;
+import demo.facts.Rating;
+
+rule "New User if less than 10 books rated AND has favorite Genres"
+    agenda-group "userState"
+        when
+            $u : User($u.getRatingNumber < 10, $u.hasFavoriteGenres == true , $u.getState !=UserState.NEW_WITH_GENRES)
+        then
+            System.out.println("NEW_WITH_GENRES");
+            modify($u){setState(UserState.NEW_WITH_GENRES)};
+    end
+
+rule "New User if less than 10 books rate AND NO favorite Genres"
+    agenda-group "userState"
+        when
+            $u : User($u.getRatingNumber < 10, $u.hasFavoriteGenres == false , $u.getState !=UserState.NEW)
+        then
+            System.out.println("NEW");
+            modify($u){setState(UserState.NEW)};
+    end
+
+rule "Old User if more than 10 books rated"
+    agenda-group "userState"
+        when
+            $u : User($u.getRatingNumber >= 10, $u.getState !=UserState.OLD)
+        then
+            System.out.println("OLD");
+            modify($u){setState(UserState.OLD)};
+    end
+
+
+rule "Evaluate similar users"
+    agenda-group "oldUser"
+        when
+            $u: User($u.getState == UserState.OLD, $s: ratings)
+            $r: UserRatingsDto($r.getCorrelationCoefficient($s, $u.getAvgRating) < 0.5)
+        then
+            delete($r);
+end
+
+rule "Insert books that are rated by similar users"
+    agenda-group "oldUser"
+        when
+           $b: UserRatingsDto()
+           $u: User($u.getState == UserState.OLD)
+           $r: Rating(rate >= 4 && !$u.hasRatedBook(book)) from $b.ratings
+        then
+            insert($r.book);
+end

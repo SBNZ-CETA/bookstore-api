@@ -1,7 +1,8 @@
 package dtos;
 
+import java.util.List;
+
 import lombok.Data;
-import lombok.Getter;
 
 @Data
 public class RegisterDto {
@@ -10,4 +11,5 @@ public class RegisterDto {
     private final String username;
     private final String password;
     private final String email;
+    private final List<Long> genres;
 }

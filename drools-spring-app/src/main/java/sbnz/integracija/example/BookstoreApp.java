@@ -1,10 +1,10 @@
 package sbnz.integracija.example;
 
-import demo.facts.Book;
 import demo.facts.Order;
-import demo.facts.OrderItem;
 import dtos.OrderDto;
-import dtos.OrderItemDto;
+import lombok.AllArgsConstructor;
+import sbnz.integracija.example.service.RatingsService;
+
 import org.kie.api.KieServices;
 import org.kie.api.builder.KieScanner;
 import org.kie.api.runtime.KieContainer;
@@ -15,7 +15,6 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 import org.modelmapper.ModelMapper;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -27,11 +26,15 @@ import java.util.Collections;
 
 @SpringBootApplication
 @EntityScan("demo.facts")
+@AllArgsConstructor
 public class BookstoreApp {
 
 	public static void main(String[] args) {
 		SpringApplication.run(BookstoreApp.class, args);
+		
 	}
+
+	
 
 	@Bean
 	public KieContainer kieContainer() {
@@ -42,6 +45,7 @@ public class BookstoreApp {
 		kScanner.start(10_000);
 		return kContainer;
 	}
+
 	@Bean
 	public CorsFilter corsFilter() {
 		final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();

@@ -5,12 +5,15 @@ import demo.facts.Order;
 import demo.facts.OrderItem;
 import demo.facts.OrderStatus;
 import dtos.CreateOrderDto;
+import dtos.GenreDto;
 import dtos.OrderDto;
 import dtos.OrderItemDto;
+
 import org.kie.api.runtime.KieContainer;
 import org.kie.api.runtime.KieSession;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+
 import sbnz.integracija.example.repository.OrderRepository;
 
 import java.util.List;
@@ -114,7 +117,7 @@ public class OrderService {
         List<OrderItemDto> orderItems = createOrderDto.getOrderItems();
         orderItems.stream().forEach(orderItem -> {
             Book book = booksService.getById(orderItem.getBookId());
-            orderItem.setBookCategory(book.getCategory());
+            orderItem.setGenre(new GenreDto(book.getGenre()));
             orderItem.setPrice(book.getCost() * orderItem.getQuantity());
         });
         createOrderDto.setTotalPrice(orderItems.stream().mapToDouble(OrderItemDto::getPrice).sum());

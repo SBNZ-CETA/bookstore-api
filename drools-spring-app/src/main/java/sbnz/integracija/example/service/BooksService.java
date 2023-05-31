@@ -1,59 +1,88 @@
 package sbnz.integracija.example.service;
 
 import demo.facts.Book;
+import demo.facts.BookCategory;
+import demo.facts.Genre;
 import demo.facts.RateUnit;
+import demo.facts.Rating;
 import demo.facts.UnauthorizedRecommendedBooks;
+import demo.facts.User;
+import demo.facts.UserState;
+import dtos.*;
+import lombok.AllArgsConstructor;
+
 import org.dmg.pmml.Model;
+import org.kie.api.runtime.ClassObjectFilter;
 import org.kie.api.runtime.KieContainer;
 import org.kie.api.runtime.KieSession;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import sbnz.integracija.example.dto.BookCreateDto;
-import sbnz.integracija.example.dto.BookReviewDto;
+
 import sbnz.integracija.example.repository.BooksRepository;
+import sbnz.integracija.example.repository.GenreRepository;
+import sbnz.integracija.example.repository.RatingRepository;
+import sbnz.integracija.example.repository.UserRepository;
+import sbnz.integracija.example.utils.UserUtils;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
+@AllArgsConstructor
 public class BooksService {
-   @Autowired
-   BooksRepository booksRepository;
+   private final BooksRepository booksRepository;
+   private final UserRepository userRepository;
+   private final RatingRepository ratingRepository;
+   private final GenreRepository genreRepository;
+   private final RatingsService ratingsService;
+   private final UserUtils userUtils;
    private final ModelMapper modelMapper;
    private final KieContainer kieContainer;
-   public BooksService(ModelMapper modelMapper, KieContainer kieContainer) {
-       this.modelMapper = modelMapper;
-       this.kieContainer = kieContainer;
+
+   public List<BookDto> getAllBookDtos() {
+        List<Book> books = getAll();
+       return booksTobooksDto(books);
    }
 
-   public List<Book> getAll() {
-       return booksRepository.findAll();
-   }
+    private List<Book> getAll() {
+        return booksRepository.findAll();
+    }
+
+
    public Book getById(Long id) {
        return booksRepository.findById(id).orElse(null);
    }
    public Book create(BookCreateDto newBook) {
        Book book = modelMapper.map(newBook, Book.class);
-       book.setRating(0.);
-       book.setRateCount(0);
        book.setPublishDate(LocalDateTime.now());
        book.setReleaseDate(LocalDateTime.now());
        book.setRateUnit(RateUnit.NEUTRAL);
        return booksRepository.save(book);
    }
 
-    public Book review(BookReviewDto reviewDto) {
+    public Rating review(BookReviewDto reviewDto) {
        if (reviewDto.getRate() > 5 || reviewDto.getRate() < 1){
-           return null;
+            return null;
        }
-       Book book = booksRepository.getOne(reviewDto.getBookId());
-       book.addNewRating(reviewDto.getRate());
 
-       return booksRepository.save(book);
+       Book book = booksRepository.getOne(reviewDto.getBookId());
+       Long userId = userUtils.getLoggedId();
+       User user = userRepository.getOne(userId);
+       Rating rating = new Rating(book.getId(),user.getId(),reviewDto.getRate());
+
+       rating = ratingRepository.save(rating);
+    
+       book = ratingsService.rateBook(book);
+       booksRepository.save(book);
+       return rating;
     }
 
-    public List<Book> getRecommendedUnauthorized() {
+    public List<BookDto> getRecommendedUnauthorized() {
         KieSession kieSession = kieContainer.newKieSession();
         List<Book> books = getAll();
         for (Book book: books) {
@@ -70,9 +99,53 @@ public class BooksService {
         kieSession.fireAllRules();
         kieSession.getAgenda().getAgendaGroup("recommendBook").setFocus();
         kieSession.fireAllRules();
-//        kieSession.getAgenda().getAgendaGroup("filterBooks").setFocus();
-//        kieSession.fireAllRules();
         kieSession.dispose();
-        return unauthorizedRecommendedBooks.getBooks();
+        return booksTobooksDto(unauthorizedRecommendedBooks.getBooks());
+    }
+
+    public List<Genre> getAllBookGenres() {
+        return genreRepository.findAll();
+    }
+
+    public List<BookDto> getReccommendedAuthorized() {
+        Long userId = userUtils.getLoggedId();
+        User user = userRepository.getOne(userId);
+        System.out.println(user.getFavoriteGenres());
+
+        KieSession kieSession = kieContainer.newKieSession();
+        kieSession.insert(user);
+        this.getAllOtherUserRatings(user.getUsername()).forEach(kieSession::insert);
+
+        kieSession.getAgenda().getAgendaGroup("userState").setFocus();
+        kieSession.fireAllRules();
+        kieSession.getAgenda().getAgendaGroup("oldUser").setFocus();
+        kieSession.fireAllRules();
+
+        if(user.getState()==UserState.NEW) return getRecommendedUnauthorized();
+
+        Collection<Book> books = (Collection<Book>)kieSession.getObjects(new ClassObjectFilter(Book.class));
+        kieSession.dispose();
+        return booksTobooksDto(new ArrayList<>(books));
+    }
+
+
+    private List<BookDto> booksTobooksDto(List<Book> books) {
+        List<BookDto> booksDto = new ArrayList<>();
+            books.stream().forEach(book -> { 
+                BookDto dto = new BookDto(book);
+                booksDto.add(dto);
+            });
+        return booksDto;
+    }
+
+    public List<UserRatingsDto> getAllOtherUserRatings(String username) {
+        return userRepository
+                .findAll()
+                .stream()
+                .filter(user -> !user.getUsername().equals(username))
+                .map(user -> new UserRatingsDto(user.getRatings()))
+                .collect(Collectors.toList());
     }
 }
+
+
