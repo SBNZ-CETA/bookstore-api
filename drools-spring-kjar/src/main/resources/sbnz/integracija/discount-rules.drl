@@ -7,7 +7,7 @@ rule "10-percent-discount"
     agenda-group "orderDiscount"
     lock-on-active true
     when
-        $o : CreateOrderDto(orderItems.size >= 3)
+        $o : CreateOrderDto(orderItems.size() >= 3)
     then
         insert (new Double($o.getTotalPrice() * 0.9));
 

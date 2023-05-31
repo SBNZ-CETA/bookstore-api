@@ -30,7 +30,7 @@ public class UserRatingsDto {
         this.ratings.forEach(rating -> {
            Rating found = primary
                    .stream()
-                   .filter(primaryRating -> rating == primaryRating)
+                   .filter(rating::hasBook)
                    .findAny()
                    .orElse(null);
            if (found != null) pairs.add(new Pair(rating.getRate(), found.getRate()));
@@ -40,23 +40,24 @@ public class UserRatingsDto {
                .stream()
                .reduce(
                        0.0F,
-                       (subtotal, element) -> subtotal + ((element.getA() - this.averageRating) * (element.getB()) - primaryAvgRating),
+                       (subtotal, element) -> subtotal + ((element.getA() - this.averageRating) * (element.getB() - primaryAvgRating)),
                        Float::sum
                );
        float secondSum = pairs
                .stream()
                .reduce(
                        0.0F,
-                       (subtotal, element) -> subtotal + (element.getA() - this.averageRating) * (element.getA() - this.averageRating),
+                       (subtotal, element) -> subtotal + ((element.getA() - this.averageRating) * (element.getA() - this.averageRating)),
                        Float::sum
                );
        float thirdSum = pairs
                .stream()
                .reduce(
                        0.0F,
-                       (subtotal, element) -> subtotal + (element.getB() - primaryAvgRating) * (element.getB() - primaryAvgRating),
+                       (subtotal, element) -> subtotal + ((element.getB() - primaryAvgRating) * (element.getB() - primaryAvgRating)),
                        Float::sum
                );
+
 
        return firstSum/((float)Math.sqrt(secondSum) * (float)Math.sqrt(thirdSum));
     }

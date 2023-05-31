@@ -108,40 +108,24 @@ public class BooksService {
     }
 
     public List<BookDto> getReccommendedAuthorized() {
-        System.out.println("INSIDE AUTHROIZED RECCOMMEND");
         Long userId = userUtils.getLoggedId();
         User user = userRepository.getOne(userId);
-        UnauthorizedRecommendedBooks unauthorizedRecommendedBooks = new UnauthorizedRecommendedBooks();
         System.out.println(user.getFavoriteGenres());
 
         KieSession kieSession = kieContainer.newKieSession();
         kieSession.insert(user);
-        kieSession.insert(this.getAllOtherUserRatings(user.getUsername()));
-
-        System.out.println("RUN KIE SESSION");
+        this.getAllOtherUserRatings(user.getUsername()).forEach(kieSession::insert);
 
         kieSession.getAgenda().getAgendaGroup("userState").setFocus();
+        kieSession.fireAllRules();
         kieSession.getAgenda().getAgendaGroup("oldUser").setFocus();
         kieSession.fireAllRules();
 
         if(user.getState()==UserState.NEW) return getRecommendedUnauthorized();
-        if(user.getState()==UserState.NEW_WITH_GENRES){
-            Set<Genre> favoriteGenres = user.getFavoriteGenres();
-            favoriteGenres.stream().forEach(genre->{
-                kieSession.insert(genre);
-            });
-            // LEE PRAVILA
-            // kieSession.getAgenda().getAgendaGroup("userState").setFocus();
-            // kieSession.fireAllRules();
-        }
-        if(user.getState()==UserState.OLD){
-            // COFI PRAVILA
-            // kieSession.getAgenda().getAgendaGroup("userState").setFocus();
-            // kieSession.fireAllRules();
-        }
+
         Collection<Book> books = (Collection<Book>)kieSession.getObjects(new ClassObjectFilter(Book.class));
         kieSession.dispose();
-        return booksTobooksDto(books.stream().collect(Collectors.toList()));
+        return booksTobooksDto(new ArrayList<>(books));
     }
 
 

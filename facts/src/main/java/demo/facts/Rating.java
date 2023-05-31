@@ -45,9 +45,7 @@ public class Rating {
         this.rate = rate;
     }
 
-    @Override
-    public boolean equals(Object o) {
-       return this.book.getId().equals(((Rating)o).book.getId());
+    public boolean hasBook(Rating rating) {
+        return Objects.equals(this.book.getId(), rating.getBook().getId());
     }
-
 }

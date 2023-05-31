@@ -40,7 +40,6 @@ public class User implements UserDetails {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private Set<Rating> ratings;
 
-    
     @ManyToMany
     public Set<Genre> favoriteGenres;
 
@@ -74,6 +73,15 @@ public class User implements UserDetails {
         return favoriteGenres;
     }
 
+    public float getAvgRating() {
+        return (float)this.ratings
+                .stream()
+                .reduce(0, (subtotal, element) -> subtotal + element.getRate(), Integer::sum) / ratings.size();
+    }
+
+    public boolean hasRatedBook(Book book) {
+        return this.ratings.stream().anyMatch(rating -> rating.getBook().getId().equals(book.getId()));
+    }
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         SimpleGrantedAuthority authority = new SimpleGrantedAuthority(type.name());

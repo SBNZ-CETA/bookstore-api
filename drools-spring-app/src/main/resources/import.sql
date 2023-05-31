@@ -92,7 +92,8 @@ insert into users_table (name, surname, email, username, password, type) values 
 insert into users_table (name, surname, email, username, password, type) values ('genericG', 'genero7', 'mail7@mail.com', 'user7', 'pw7', 'REGULAR');
 insert into users_table (name, surname, email, username, password, type) values ('genericH', 'genero8', 'mail8@mail.com', 'user8', 'pw8', 'REGULAR');
 insert into users_table (name, surname, email, username, password, type) values ('genericI', 'genero9', 'mail9@mail.com', 'user9', 'pw9', 'REGULAR');
-
+insert into users_table (name, surname, email, username, password, type) values ('Filip', 'Milosevic', 'mail9@mail.com', 'cofara', '$2a$10$pOs0fsWQe3yNPAL1wKK5P.3aX77602reFAIBx79LToqp6ZSdjke/i', 'REGULAR');
+--10 | mail@mail.com  | Filip    | $2a$10$pOs0fsWQe3yNPAL1wKK5P.3aX77602reFAIBx79LToqp6ZSdjke/i | Milosevic | REGULAR | cofara
 -- RATINGS
 
     --USER1
@@ -323,4 +324,30 @@ insert into ratings (rate,book_id,user_id) values (3,43,9);
 insert into ratings (rate,book_id,user_id) values (2,33,9);
 insert into ratings (rate,book_id,user_id) values (1,40,9);
 
+-- Cofara user
+insert into ratings (rate,book_id,user_id) values (4,2, 10);
+insert into ratings (rate,book_id,user_id) values (5,3, 10);
+insert into ratings (rate,book_id,user_id) values (2,5, 10);
+insert into ratings (rate,book_id,user_id) values (4,25,10);
+insert into ratings (rate,book_id,user_id) values (5,14,10);
+insert into ratings (rate,book_id,user_id) values (3,15,10);
+insert into ratings (rate,book_id,user_id) values (3,48,10);
+insert into ratings (rate,book_id,user_id) values (4,49,10);
+insert into ratings (rate,book_id,user_id) values (5,36,10);
+insert into ratings (rate,book_id,user_id) values (5,37,10);
+insert into ratings (rate,book_id,user_id) values (4,38,10);
+insert into ratings (rate,book_id,user_id) values (2,33,10);
+insert into ratings (rate,book_id,user_id) values (4,40,10);
+insert into ratings (rate,book_id,user_id) values (1,41,10);
+insert into ratings (rate,book_id,user_id) values (4,42,10);
+insert into ratings (rate,book_id,user_id) values (2,1, 10);
+insert into ratings (rate,book_id,user_id) values (2,19,10);
+insert into ratings (rate,book_id,user_id) values (4,17,10);
+insert into ratings (rate,book_id,user_id) values (1,39,10);
+insert into ratings (rate,book_id,user_id) values (4,31,10);
+insert into ratings (rate,book_id,user_id) values (5,29,10);
+insert into ratings (rate,book_id,user_id) values (4,21,10);
+insert into ratings (rate,book_id,user_id) values (3,43,10);
+insert into ratings (rate,book_id,user_id) values (2,33,10);
+insert into ratings (rate,book_id,user_id) values (1,40,10);
 -- insert into users_table (name, surname, email, username, password, type) values ('asd', 'qwer', 'asdf', 'asd', 'asd', 'ADMIN');
