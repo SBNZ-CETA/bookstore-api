@@ -40,6 +40,11 @@ public class BooksController {
         return new ResponseEntity<>(booksService.getAllBookGenres(), HttpStatus.OK);
     }
 
+    @GetMapping(value = "/recommend-unauthorized", produces = "application/json")
+    public ResponseEntity<List<BookDto>> getRecommendedUnauthorized() {
+        return new ResponseEntity<>(booksService.getRecommendedUnauthorized(), HttpStatus.OK);
+    }
+
     @GetMapping(value = "/recommendations",produces = "application/json")
     public ResponseEntity<List<BookDto>> getReccommendedAuthorized(){
         return new ResponseEntity<>(booksService.getReccommendedAuthorized(),HttpStatus.OK);
