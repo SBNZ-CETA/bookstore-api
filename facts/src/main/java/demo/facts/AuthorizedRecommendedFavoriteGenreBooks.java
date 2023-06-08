@@ -20,14 +20,13 @@ public class AuthorizedRecommendedFavoriteGenreBooks {
     }
 
     public void addPopularWriter(Writer writer){
-        // List<Writer> list = allWriters.stream().filter(w -> w.getId()==writer.getId()).collect(Collectors.toList());
-        // if(list.isEmpty()) 
         topWriters.add(writer);
     }
 
     public void addBook(Book book){
         List<Book> list = allBooks.stream().filter(b -> b.getId()==book.getId()).collect(Collectors.toList());
-        if(list.isEmpty()) allBooks.add(book);
+        List<Book> bestList = topBooks.stream().filter(b -> b.getId()==book.getId()).collect(Collectors.toList());
+        if(list.isEmpty() && bestList.isEmpty()) allBooks.add(book);
     }
 
     public void addPopularBook(Book book){
@@ -36,7 +35,7 @@ public class AuthorizedRecommendedFavoriteGenreBooks {
 
     public Writer getPopularWriterAndDelete(){
         Writer mostPopular = allWriters.stream()
-            .min(Comparator.comparing(Writer::getWriterRatingSum))
+            .max(Comparator.comparing(Writer::getWriterRatingSum))
             .orElse(null);
         if (mostPopular!= null) {
             allWriters.remove(mostPopular);
@@ -47,9 +46,11 @@ public class AuthorizedRecommendedFavoriteGenreBooks {
     }
 
     public Book getPopularBookAndDelete(){
+
         Book mostPopular = allBooks.stream()
-            .min(Comparator.comparing(Book::getRating))
+            .max(Comparator.comparing(Book::getRating))
             .orElse(null);
+        
         if (mostPopular!= null) {
             allBooks.remove(mostPopular);
             return mostPopular;
@@ -58,8 +59,5 @@ public class AuthorizedRecommendedFavoriteGenreBooks {
         }
        
     }
-
-    // public List<Writer> orderedWriters(List<Genre> wantedGenres){
-    // }
 
 }

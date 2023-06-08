@@ -68,34 +68,26 @@ rule "Evaluate Writers for Favorite Genres"
             $w : Writer($w.getGenreRepresentationInWriter($g) >= 0.30)
             $l : AuthorizedRecommendedFavoriteGenreBooks()
         then
-            System.out.println("MATCHING WRITER FOUND");
             $l.addWriter($w);
-            System.out.println($w.getName());
-            System.out.println($w);
-            System.out.println("MATCHING WRITER FOUND END");
     end
 
-
-
+rule "Empty Writers from Working Memmory"
+    agenda-group "newGenreUser"
+        when
+            $w : Writer()
+        then
+            delete($w);
+    end
 
 rule "Find 4 Most Popular Writers"
     agenda-group "newGenreUser"
         when
-            $l : AuthorizedRecommendedFavoriteGenreBooks(topWriters.size()<4) @Watch (topWriters,allWriters) //NI WATCH NE RADI NISTA BUKVALNO
-            $w : Writer() from $l.allWriters
-            // $w : Writer($w.isEmpty() == false) from $l.getPopularWriterAndDelete()
-            $v : Writer($v.isEmpty()== false) from $l.getPopularWriterAndDelete()
-            
+            $l : AuthorizedRecommendedFavoriteGenreBooks($a: allWriters != null,$t: topWriters)
+            eval($a.size() > 0)
+            eval($t.size() < 4)
         then
-            if ($l.getTopWriters().size() < 4) {
-                System.out.println("POPULAR WRITER FOUND");
-                $l.addPopularWriter($v);
-                System.out.println($v.getName());
-                System.out.println("POPULAR WRITER FOUND END");
-            }
+            modify($l){addPopularWriter($l.getPopularWriterAndDelete())};
     end
-
-
 
 rule "Add Books from Top Writers"
     agenda-group "newGenreUser"
@@ -104,37 +96,17 @@ rule "Add Books from Top Writers"
             $w : Writer() from $t
             $b : Book() from $w.getBooks()
         then
-            System.out.println("ADDED BOOK");
             $l.addBook($b);
     end
 
 rule "Get Best Books"
+    salience -100
     agenda-group "newGenreUser"
         when
-            $l : AuthorizedRecommendedFavoriteGenreBooks(topWriters.size()<10 , $t: topWriters)
-            $i : Book() from $l.getAllBooks()
+            $l : AuthorizedRecommendedFavoriteGenreBooks($a: allBooks != null,$t: topBooks)
+            eval($t.size() < 10)
+            eval($a.size() > 0)
             $b : Book($b.isEmpty()== false) from $l.getPopularBookAndDelete()
         then
-            System.out.println("ENTERD THEN POPULAR BOOK");
-            System.out.println($b.getTitle());
-            System.out.println($b.getRating());
-            if ($l.getTopBooks().size() < 10) {
-                System.out.println("ADDED POPULAR BOOK");
-                $l.addPopularBook($b);
-            }
+            modify($l){addPopularBook($b)};
     end
-
-
-// rule "Find 4 Most Popular Writers"
-//     agenda-group "newGenreUser"
-//         when
-//             $l : AuthorizedRecommendedFavoriteGenreBooks(topWriters.size() < 4,$a: allWriters) @Watch(topWriters,allWriters)
-//             $w : Writer($w.isEmpty() == false) from $l.getPopularWriterAndDelete()
-            
-//         then
-//             System.out.println("POPULAR WRITER FOUND");
-//             $l.addPopularWriter($w);
-//             System.out.println($w.getName());
-//             System.out.println("POPULAR WRITER FOUND END");
-//     end
-

@@ -124,7 +124,9 @@ public class BooksService {
         kieSession.getAgenda().getAgendaGroup("userState").setFocus();
         kieSession.fireAllRules();
 
-        if(user.getState()==UserState.NEW) return getRecommendedUnauthorized();
+        if(user.getState()==UserState.NEW){
+            kieSession.dispose();
+            return getRecommendedUnauthorized();}
 
         kieSession.getAgenda().getAgendaGroup("oldUser").setFocus();
         kieSession.fireAllRules();
