@@ -13,4 +13,7 @@ public class GenreDto {
         this.name = genre.getName();
     }
 
+    public GenreDto() {
+    }
+
 }

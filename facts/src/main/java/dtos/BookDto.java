@@ -25,6 +25,7 @@ public class BookDto {
     private boolean isNew;
     private boolean popular;
     private RateUnit rateUnit;
+    private Long sellerBankAccountId;
 
     public BookDto(Book book){
         Set<Rating> ratings = book.getRatings();
@@ -46,6 +47,7 @@ public class BookDto {
         this.popular = book.isPopular();
         this.rateUnit = book.getRateUnit();
         this.ratings = ratingsDto;
+        this.sellerBankAccountId = book.getSellerBankAccountId();
     }
 
 

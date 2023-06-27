@@ -12,6 +12,7 @@ public class CreateOrderDto {
     private List<OrderItemDto> orderItems;
     private Double totalPrice;
     private final PaymentType paymentType;
+    private TransactionDto transactionDto;
 
     public Double getTotalPrice() {
         return totalPrice;
@@ -21,11 +22,4 @@ public class CreateOrderDto {
         this.totalPrice = totalPrice;
     }
 
-    public List<OrderItemDto> getOrderItems() {
-        return orderItems;
-    }
-
-    public void setOrderItems(List<OrderItemDto> orderItems) {
-        this.orderItems = orderItems;
-    }
 }
