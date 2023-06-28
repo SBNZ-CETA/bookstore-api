@@ -19,14 +19,14 @@ insert into writers (name,surname) values ('Miloslav','Samardzic');
 -- BOOKS
     -- DZORDZ ORVEL
 insert into books (title, writer_id, genre_id, cost, publish_date, release_date, rating, rate_count) values ('1984', 1 , 2, 1000, DATE('1949-4-14'), DATE('2023-1-4'), 0, 0);
-insert into books (title, writer_id, genre_id, cost, publish_date, release_date, rating, rate_count) values ('Zivotinjska Farma', 1 , 2, 250, DATE('1952-6-8'), DATE('2012-3-24'), 0, 0);
+insert into books (title, writer_id, genre_id, cost, publish_date, release_date, seller_bank_account_id, rating, rate_count) values ('Zivotinjska Farma', 1 , 2, 250, DATE('1952-6-8'), DATE('2012-3-24'),4, 0, 0);
 insert into books (title, writer_id, genre_id, cost, publish_date, release_date, rating, rate_count) values ('Knjige ili cigarete', 1 , 2, 440, DATE('1966-1-13'), DATE('2023-1-1'), 0, 0);
-insert into books (title, writer_id, genre_id, cost, publish_date, release_date, rating, rate_count) values ('Kataloniji u cast', 1 , 2, 680, DATE('1946-11-22'), DATE('2021-7-22'), 0, 0);
+insert into books (title, writer_id, genre_id, cost, publish_date, release_date, seller_bank_account_id, rating, rate_count) values ('Kataloniji u cast', 1 , 2, 680, DATE('1946-11-22'), DATE('2021-7-22'),4, 0, 0);
 insert into books (title, writer_id, genre_id, cost, publish_date, release_date, rating, rate_count) values ('U utorbi kita', 1 , 3, 1198, DATE('1944-1-12'), DATE('2020-5-4'), 0, 0);
-insert into books (title, writer_id, genre_id, cost, publish_date, release_date, rating, rate_count) values ('Put za Vigan', 1 , 3, 730, DATE('1949-4-11'), DATE('2019-3-15'), 0, 0);
+insert into books (title, writer_id, genre_id, cost, publish_date, release_date, seller_bank_account_id, rating, rate_count) values ('Put za Vigan', 1 , 3, 730, DATE('1949-4-11'), DATE('2019-3-15'),4, 0, 0);
 insert into books (title, writer_id, genre_id, cost, publish_date, release_date, rating, rate_count) values ('Niko i nista u Parizu i Londonu', 1 , 5, 512, DATE('1951-10-10'), DATE('2021-12-13'), 0, 0);
 insert into books (title, writer_id, genre_id, cost, publish_date, release_date, rating, rate_count) values ('U borbi za vazduh', 1 , 1, 560, DATE('1953-11-25'), DATE('2017-10-12'), 0, 0);
-insert into books (title, writer_id, genre_id, cost, publish_date, release_date, rating, rate_count) values ('Svestenikova kci', 1 , 5, 755, DATE('1949-10-22'), DATE('2015-1-13'), 0, 0);
+insert into books (title, writer_id, genre_id, cost, publish_date, release_date,seller_bank_account_id, rating, rate_count) values ('Svestenikova kci', 1 , 5, 755, DATE('1949-10-22'), DATE('2015-1-13'),4, 0, 0);
 
     --MIRJANA BOBIC
 insert into books (title, writer_id, genre_id, cost, publish_date, release_date, rating, rate_count) values ('Sazvezdje Svitaca', 2 , 4, 1040, DATE('1949-4-14'), DATE('2022-1-4'), 0, 0);

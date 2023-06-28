@@ -33,6 +33,8 @@ public class Book {
     private LocalDateTime publishDate;
     @Column
     private LocalDateTime releaseDate;
+    @Column
+    private Long sellerBankAccountId;
     @OneToMany(mappedBy = "book", cascade = CascadeType.ALL)
     private Set<Rating> ratings;
     private Double rating;
